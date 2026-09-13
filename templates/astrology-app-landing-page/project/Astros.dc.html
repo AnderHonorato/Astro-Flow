@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/nocturne-dae32a1b-95d2-4f36-863b-0d9f6c90f957/styles.css">
+<script src="_ds/nocturne-dae32a1b-95d2-4f36-863b-0d9f6c90f957/_ds_bundle.js"></script>
+<style>
+body{margin:0;background:#0f111b;font-family:Inter,system-ui,sans-serif}
+a{color:#b5abfc}a:hover{color:#d2cefd}
+.dv-turn{padding:40px 44px 40px;background:#0f111b;border-bottom:1px solid rgba(233,233,237,.08);scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}
+.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#e9e9ed;color:#161826;border-radius:4px;text-decoration:none}
+.dv-tname{font:500 13px/1.2 Inter,system-ui;color:#e9e9ed}
+.dv-opts{display:flex;flex-wrap:wrap;gap:34px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}
+.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(233,233,237,.1);color:#e9e9ed;border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11px/1.3 Inter,system-ui;color:rgba(233,233,237,.55)}
+.dv-card{max-width:100%;border-radius:8px;overflow:hidden;box-shadow:0 0 0 1px rgba(233,233,237,.1),0 24px 60px rgba(0,0,0,.5)}
+.dv-opt:target .dv-oid{background:#9184d9;color:#161826}
+.dv-next{margin:22px 0 0;font:12px/1.5 Inter,system-ui;color:rgba(233,233,237,.5)}
+@keyframes lpSpin{to{transform:rotate(360deg)}}
+@keyframes lpTwinkle{0%,100%{opacity:.15}50%{opacity:.9}}
+@keyframes lpDrift{0%{transform:translate3d(-3%,0,0) scale(1.04)}100%{transform:translate3d(3%,2%,0) scale(1.1)}}
+@keyframes lpBreathe{0%,100%{opacity:.3;transform:scale(.97)}50%{opacity:.65;transform:scale(1.05)}}
+@keyframes lpRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes lpTrace{from{stroke-dashoffset:900}to{stroke-dashoffset:0}}
+.lp-sign{transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease,background .35s ease}
+.lp-sign:hover{transform:translateY(-5px);background:rgba(66,58,106,.5);box-shadow:0 0 0 1px #9184d9,0 12px 30px rgba(0,0,0,.45)}
+.lp-sign:hover svg{stroke:#f5f4ff}
+.lp-step{transition:border-color .3s ease}
+.lp-nav a{text-decoration:none;color:#cfd3e5;font-size:13.5px;transition:color .2s ease}
+.lp-nav a:hover{color:#b5abfc}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Astros — landing responsiva + app móvel (Nocturne)</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1a">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Landing desktop · 1440 · roda celeste animada, dados ao vivo, cadastro com dados de nascimento</div>
+<div class="dv-card" style="width:1440px;background:#161826;color:#e9e9ed">
+
+<div style="position:relative;overflow:hidden">
+<div style="position:absolute;inset:0;pointer-events:none">
+<div style="position:absolute;inset:-15%;background:radial-gradient(50% 40% at 22% 8%,rgba(66,58,106,.85),transparent 70%),radial-gradient(40% 40% at 78% 30%,rgba(38,42,96,.75),transparent 72%);animation:lpDrift 30s ease-in-out infinite alternate"></div>
+<sc-for list="{{ heroStars }}" as="s" hint-placeholder-count="40"><i style="{{ s.css }}"></i></sc-for>
+</div>
+
+<div class="lp-nav" style="position:relative;display:flex;align-items:center;gap:34px;padding:26px 56px">
+<div style="display:flex;align-items:center;gap:11px;margin-right:auto">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#b5abfc" stroke-width="1.2" stroke-linecap="round"><path d="M3.5 12a8.5 8.5 0 1 0 17 0a8.5 8.5 0 1 0-17 0"></path><path d="M10.8 12a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0-2.4 0"></path><path d="M12 1.2v2.2 M12 20.6v2.2 M1.2 12h2.2 M20.6 12h2.2"></path></svg>
+<span style="font-size:17px;letter-spacing:.22em;text-transform:uppercase">Astros</span>
+</div>
+<a href="#1a">O céu hoje</a><a href="#1a">Mapa natal</a><a href="#1a">Sinastria</a><a href="#1a">Planos</a>
+<a href="#1a" style="color:#9397ab">Entrar</a>
+<a href="#1a" class="btn btn-primary" style="min-height:38px;padding:0 18px;text-decoration:none">Criar minha carta</a>
+</div>
+
+<div style="position:relative;display:grid;grid-template-columns:1fr 620px;gap:40px;align-items:center;padding:36px 56px 64px">
+<div style="animation:lpRise .8s cubic-bezier(.2,.8,.2,1) both">
+<div style="display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border-radius:999px;box-shadow:0 0 0 1px #423a6a;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#b5abfc;margin-bottom:22px">
+<i style="width:5px;height:5px;border-radius:999px;background:#9184d9;box-shadow:0 0 8px #9184d9;display:block"></i>efemérides ao vivo · GMT-3
+</div>
+<h1 style="font-size:74px;line-height:.98;letter-spacing:-.035em;font-weight:500;margin:0 0 20px;text-wrap:balance">O céu que<br>te escreve</h1>
+<p style="font-size:17px;line-height:1.65;color:#b2b6ca;max-width:480px;margin:0 0 30px;text-wrap:pretty">Seu mapa natal calculado ao minuto do primeiro respiro, e o trânsito de hoje lido em cima dele. Não o horóscopo de revista — a sua carta, em tempo real.</p>
+<div style="display:flex;gap:10px;align-items:center;max-width:480px">
+<input class="input" placeholder="seu e-mail" style="min-height:48px;font-size:14.5px;flex:1"><a href="#1a" class="btn btn-primary" style="min-height:48px;padding:0 24px;font-size:14.5px;text-decoration:none;white-space:nowrap">Calcular meu céu</a>
+</div>
+<div style="display:flex;gap:26px;margin-top:26px;font-size:11.5px;color:#75798c">
+<span>Swiss Ephemeris</span><span>Placidus, Koch, Casas iguais</span><span>7 dias grátis</span>
+</div>
+</div>
+<div style="position:relative;width:620px;height:620px;display:grid;place-items:center">
+<div style="position:absolute;width:520px;height:520px;border-radius:999px;background:radial-gradient(circle,rgba(145,132,217,.28),transparent 62%);animation:lpBreathe 9s ease-in-out infinite"></div>
+<div style="position:absolute;width:598px;height:598px;animation:lpSpin 240s linear infinite;will-change:transform">
+<svg width="598" height="598" viewBox="0 0 598 598" style="display:block">
+<circle cx="299" cy="299" r="292" fill="none" stroke="#3f424d" stroke-width="0.7" stroke-dasharray="1 7"></circle>
+<sc-for list="{{ ringMarks }}" as="m" hint-placeholder-count="12"><line x1="{{ m.x1 }}" y1="{{ m.y1 }}" x2="{{ m.x2 }}" y2="{{ m.y2 }}" stroke="#9184d9" stroke-width="1" opacity="0.6"></line></sc-for>
+</svg>
+</div>
+<div style="position:relative;width:520px;height:520px">
+<dc-import name="ZodiacWheel" variant="celestial" hint-size="520px,520px"></dc-import>
+</div>
+</div>
+</div>
+
+<div style="position:relative;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(233,233,237,.1);border-bottom:1px solid rgba(233,233,237,.1)">
+<sc-for list="{{ liveBand }}" as="b" hint-placeholder-count="4">
+<div style="{{ b.css }}">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b5abfc" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ b.glyph }}"></path></svg>
+<div><div style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#75798c;margin-bottom:3px">{{ b.k }}</div><div style="font-size:16px;font-variant-numeric:tabular-nums">{{ b.v }}</div></div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="padding:76px 56px 20px;text-align:center">
+<div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#9184d9;margin-bottom:14px">os doze</div>
+<h2 style="font-size:42px;letter-spacing:-.03em;font-weight:500;margin:0 0 12px">Placas gravadas, uma por signo</h2>
+<p style="font-size:15px;line-height:1.6;color:#9397ab;max-width:560px;margin:0 auto 42px">Cada signo tem sua própria placa: o glifo desenhado à mão, o elemento, o regente e a faixa de datas. Toque para abrir a leitura.</p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:14px;padding:0 56px 76px">
+<sc-for list="{{ signPlates }}" as="s" hint-placeholder-count="12">
+<div class="lp-sign" style="border-radius:14px;padding:20px 14px 16px;text-align:center;background:#1c1e2c;box-shadow:0 0 0 1px #3f424d;cursor:pointer">
+<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d2cefd" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 12px"><path d="{{ s.glyph }}"></path></svg>
+<div style="font-size:15px;margin-bottom:3px">{{ s.name }}</div>
+<div style="font-size:10.5px;color:#75798c;font-variant-numeric:tabular-nums">{{ s.dates }}</div>
+<div style="margin-top:9px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#9184d9">{{ s.el }}</div>
+</div>
+</sc-for>
+</div>
+
+<div style="display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:center;padding:0 56px 84px">
+<div>
+<div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#9184d9;margin-bottom:14px">a leitura</div>
+<h2 style="font-size:42px;line-height:1.04;letter-spacing:-.03em;font-weight:500;margin:0 0 18px;text-wrap:balance">Dia, semana, mês e ano — sempre em cima da sua carta</h2>
+<p style="font-size:15.5px;line-height:1.7;color:#b2b6ca;margin:0 0 28px;text-wrap:pretty">O texto muda quando o céu muda. Cada leitura nomeia o aspecto que a gerou, o orbe e a hora exata em que ele se fecha, para você saber por que aquilo está sendo dito.</p>
+<div style="display:flex;flex-direction:column;gap:18px">
+<sc-for list="{{ steps }}" as="st" hint-placeholder-count="3">
+<div class="lp-step" style="display:flex;gap:16px;align-items:flex-start;padding-left:18px;border-left:1px solid #3f424d">
+<div style="font-size:11px;color:#9184d9;font-variant-numeric:tabular-nums;padding-top:3px">{{ st.n }}</div>
+<div><div style="font-size:16px;margin-bottom:4px">{{ st.t }}</div><div style="font-size:13.5px;line-height:1.6;color:#9397ab;max-width:420px">{{ st.b }}</div></div>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="display:grid;place-items:center;position:relative">
+<div style="position:absolute;width:420px;height:420px;border-radius:999px;background:radial-gradient(circle,rgba(66,58,106,.7),transparent 65%)"></div>
+<div style="position:relative;transform:scale(.86)"><dc-import name="AstrosApp" screen="horoscopo" hint-size="402px,874px"></dc-import></div>
+</div>
+</div>
+
+<div style="position:relative;overflow:hidden;padding:76px 56px;background:linear-gradient(160deg,#1b1e30,#161826 60%);border-top:1px solid rgba(233,233,237,.1)">
+<div style="position:absolute;inset:0;pointer-events:none"><sc-for list="{{ formStars }}" as="s" hint-placeholder-count="18"><i style="{{ s.css }}"></i></sc-for></div>
+<div style="position:relative;display:grid;grid-template-columns:1fr 1.15fr;gap:64px;align-items:start">
+<div>
+<div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#9184d9;margin-bottom:14px">criar conta</div>
+<h2 style="font-size:40px;line-height:1.05;letter-spacing:-.03em;font-weight:500;margin:0 0 16px">Quatro campos, uma vida inteira de céu</h2>
+<p style="font-size:15px;line-height:1.7;color:#9397ab;margin:0 0 22px;text-wrap:pretty">Nome, data, hora e lugar. É disso que o cálculo precisa — e é só isso que pedimos. O Ascendente muda a cada quatro minutos, por isso a hora vale tanto quanto a data.</p>
+<div style="display:flex;flex-direction:column;gap:12px">
+<sc-for list="{{ trust }}" as="t" hint-placeholder-count="3">
+<div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.55;color:#b2b6ca">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9184d9" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px"><path d="M4 12.5l5 5L20 6.5"></path></svg><span>{{ t.t }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="border-radius:16px;padding:30px;background:rgba(35,37,50,.85);box-shadow:0 0 0 1px #423a6a,0 20px 50px rgba(0,0,0,.4)">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+<div class="field" style="grid-column:1/-1"><label>Nome completo</label><input class="input" placeholder="como no registro" style="min-height:44px"></div>
+<div class="field"><label>E-mail</label><input class="input" placeholder="voce@email.com" style="min-height:44px"></div>
+<div class="field"><label>Senha</label><input class="input" type="password" placeholder="mínimo 8 caracteres" style="min-height:44px"></div>
+<div class="field" style="grid-column:1/-1"><label>Data de nascimento</label>
+<div style="display:grid;grid-template-columns:1fr 1fr 1.2fr 1.6fr;gap:10px">
+<input class="input" placeholder="dia" style="min-height:44px;text-align:center"><input class="input" placeholder="mês" style="min-height:44px;text-align:center"><input class="input" placeholder="ano" style="min-height:44px;text-align:center"><input class="input" placeholder="hh:mm" style="min-height:44px;text-align:center"></div>
+</div>
+<div class="field" style="grid-column:1/-1"><label>Cidade de nascimento</label><input class="input" placeholder="Belo Horizonte, MG · Brasil" style="min-height:44px"></div>
+<div style="grid-column:1/-1;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+<label class="radio"><input type="radio" name="lphouse" checked><span class="dot"></span><span style="font-size:13px">Placidus</span></label>
+<label class="radio"><input type="radio" name="lphouse"><span class="dot"></span><span style="font-size:13px">Koch</span></label>
+<label class="radio"><input type="radio" name="lphouse"><span class="dot"></span><span style="font-size:13px">Casas iguais</span></label>
+</div>
+</div>
+<a href="#1a" class="btn btn-primary btn-block" style="min-height:50px;font-size:15px;margin-top:22px;text-decoration:none">Revelar meu mapa</a>
+<p style="font-size:11px;line-height:1.55;color:#595d6c;text-align:center;margin:12px 0 0">Ao continuar você aceita os termos. Seus dados de nascimento servem só ao cálculo — nada é vendido, nada é lido por outros olhos.</p>
+</div>
+</div>
+</div>
+
+<div style="padding:76px 56px 84px;text-align:center;border-top:1px solid rgba(233,233,237,.1)">
+<div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#9184d9;margin-bottom:14px">planos</div>
+<h2 style="font-size:40px;letter-spacing:-.03em;font-weight:500;margin:0 0 40px">O céu inteiro, não só a manchete</h2>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:1040px;margin:0 auto;text-align:left">
+<sc-for list="{{ planCards }}" as="p" hint-placeholder-count="3">
+<div style="{{ p.css }}">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:{{ p.ink }}">{{ p.name }}</div><span style="{{ p.tagCss }}">{{ p.tag }}</span></div>
+<div style="font-size:38px;letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-bottom:2px">{{ p.price }}</div>
+<div style="font-size:12px;color:#75798c;margin-bottom:20px">{{ p.per }}</div>
+<div style="display:flex;flex-direction:column;gap:9px;margin-bottom:24px">
+<sc-for list="{{ p.perks }}" as="k" hint-placeholder-count="4">
+<div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.5;color:#cfd3e5">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9184d9" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px"><path d="M4 12.5l5 5L20 6.5"></path></svg><span>{{ k.t }}</span>
+</div>
+</sc-for>
+</div>
+<a href="#1a" class="{{ p.btnClass }}" style="min-height:44px;width:100%;text-decoration:none">{{ p.cta }}</a>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display:flex;align-items:center;gap:30px;padding:28px 56px;border-top:1px solid rgba(233,233,237,.1);font-size:12px;color:#75798c">
+<div style="display:flex;align-items:center;gap:9px;color:#9397ab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#75798c" stroke-width="1.2"><path d="M3.5 12a8.5 8.5 0 1 0 17 0a8.5 8.5 0 1 0-17 0"></path><path d="M10.8 12a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0-2.4 0"></path></svg><span style="letter-spacing:.2em">ASTROS</span></div>
+<span>© 2026</span><a href="#1a" style="color:#75798c;text-decoration:none">Privacidade</a><a href="#1a" style="color:#75798c;text-decoration:none">Termos</a><a href="#1a" style="color:#75798c;text-decoration:none">Efemérides</a>
+<span style="margin-left:auto;font-variant-numeric:tabular-nums">Sol 22°14′ Leão · Lua 8°02′ Peixes · atualizado agora</span>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1b">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>App móvel · 8 telas navegáveis (toque nas abas, na roda, nos planos)</div>
+<div style="display:flex;flex-wrap:wrap;gap:26px;max-width:1440px">
+<sc-for list="{{ phones }}" as="p" hint-placeholder-count="8">
+<div style="display:flex;flex-direction:column;gap:8px;flex:none;contain:content">
+<div style="display:flex;align-items:baseline;gap:8px"><span style="font:600 10px ui-monospace,Menlo,monospace;padding:3px 6px;border-radius:4px;background:rgba(233,233,237,.1);color:#e9e9ed">{{ p.n }}</span><span style="font-size:12px;color:#e9e9ed">{{ p.label }}</span></div>
+<div style="font-size:11px;color:rgba(233,233,237,.45);max-width:402px;line-height:1.45">{{ p.note }}</div>
+<dc-import name="AstrosApp" screen="{{ p.screen }}" hint-size="402px,874px"></dc-import>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div class="dv-opt" id="1c">
+<div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Landing no navegador móvel · 430 · mesma página, empilhada</div>
+<div class="dv-card" style="width:430px;background:#161826;color:#e9e9ed">
+<div style="position:relative;overflow:hidden">
+<div style="position:absolute;inset:0;pointer-events:none">
+<div style="position:absolute;inset:-20%;background:radial-gradient(60% 40% at 30% 6%,rgba(66,58,106,.9),transparent 70%),radial-gradient(50% 40% at 85% 34%,rgba(38,42,96,.7),transparent 72%);animation:lpDrift 30s ease-in-out infinite alternate"></div>
+<sc-for list="{{ formStars }}" as="s" hint-placeholder-count="10"><i style="{{ s.css }}"></i></sc-for>
+</div>
+<div style="position:relative;display:flex;align-items:center;gap:12px;padding:20px 22px">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b5abfc" stroke-width="1.2" stroke-linecap="round"><path d="M3.5 12a8.5 8.5 0 1 0 17 0a8.5 8.5 0 1 0-17 0"></path><path d="M10.8 12a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0-2.4 0"></path><path d="M12 1.2v2.2 M12 20.6v2.2 M1.2 12h2.2 M20.6 12h2.2"></path></svg>
+<span style="font-size:15px;letter-spacing:.22em;text-transform:uppercase;margin-right:auto">Astros</span>
+<a href="#1c" style="font-size:13px;color:#9397ab;text-decoration:none">Entrar</a>
+<button class="btn btn-icon btn-secondary" style="border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cfd3e5" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h16 M4 12h16 M4 17h16"></path></svg></button>
+</div>
+<div style="position:relative;padding:14px 22px 30px">
+<div style="display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;box-shadow:0 0 0 1px #423a6a;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#b5abfc;margin-bottom:18px">
+<i style="width:5px;height:5px;border-radius:999px;background:#9184d9;box-shadow:0 0 8px #9184d9;display:block"></i>efemérides ao vivo
+</div>
+<h1 style="font-size:46px;line-height:1;letter-spacing:-.035em;font-weight:500;margin:0 0 14px">O céu que<br>te escreve</h1>
+<p style="font-size:15px;line-height:1.65;color:#b2b6ca;margin:0 0 22px;text-wrap:pretty">Seu mapa natal ao minuto do primeiro respiro, e o trânsito de hoje lido em cima dele.</p>
+<div style="position:relative;width:100%;margin:0 0 22px"><div style="position:absolute;inset:8% 8%;border-radius:999px;background:radial-gradient(circle,rgba(145,132,217,.3),transparent 62%);animation:lpBreathe 9s ease-in-out infinite"></div><dc-import name="ZodiacWheel" variant="celestial" hint-size="100%,386px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:9px">
+<input class="input" placeholder="seu e-mail" style="min-height:48px;font-size:14.5px">
+<a href="#1c" class="btn btn-primary btn-block" style="min-height:48px;font-size:15px;text-decoration:none;margin:0">Calcular meu céu</a>
+</div>
+</div>
+<div style="position:relative;display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(233,233,237,.1)">
+<sc-for list="{{ liveBand }}" as="b" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;gap:11px;padding:16px 18px;border-bottom:1px solid rgba(233,233,237,.08);border-right:1px solid rgba(233,233,237,.08)">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b5abfc" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ b.glyph }}"></path></svg>
+<div><div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#75798c;margin-bottom:2px">{{ b.k }}</div><div style="font-size:12.5px;font-variant-numeric:tabular-nums">{{ b.v }}</div></div>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="padding:36px 22px 10px">
+<div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#9184d9;margin-bottom:10px">os doze</div>
+<h2 style="font-size:28px;letter-spacing:-.03em;font-weight:500;margin:0 0 22px">Placas gravadas, uma por signo</h2>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 22px 34px">
+<sc-for list="{{ signPlates }}" as="s" hint-placeholder-count="12">
+<div class="lp-sign" style="border-radius:12px;padding:14px 8px 12px;text-align:center;background:#1c1e2c;box-shadow:0 0 0 1px #3f424d">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#d2cefd" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 8px"><path d="{{ s.glyph }}"></path></svg>
+<div style="font-size:12.5px">{{ s.name }}</div>
+<div style="font-size:9.5px;color:#75798c;font-variant-numeric:tabular-nums;margin-top:2px">{{ s.dates }}</div>
+</div>
+</sc-for>
+</div>
+<div style="padding:0 22px 34px">
+<div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#9184d9;margin-bottom:10px">a leitura</div>
+<h2 style="font-size:28px;line-height:1.06;letter-spacing:-.03em;font-weight:500;margin:0 0 18px;text-wrap:balance">Dia, semana, mês e ano em cima da sua carta</h2>
+<div style="display:flex;flex-direction:column;gap:14px">
+<sc-for list="{{ steps }}" as="st" hint-placeholder-count="3">
+<div style="display:flex;gap:13px;align-items:flex-start;padding-left:14px;border-left:1px solid #3f424d">
+<div style="font-size:10.5px;color:#9184d9;font-variant-numeric:tabular-nums;padding-top:3px">{{ st.n }}</div>
+<div><div style="font-size:14.5px;margin-bottom:3px">{{ st.t }}</div><div style="font-size:12.5px;line-height:1.55;color:#9397ab">{{ st.b }}</div></div>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="position:relative;padding:34px 22px;background:linear-gradient(160deg,#1b1e30,#161826 60%);border-top:1px solid rgba(233,233,237,.1)">
+<div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#9184d9;margin-bottom:10px">criar conta</div>
+<h2 style="font-size:26px;line-height:1.08;letter-spacing:-.03em;font-weight:500;margin:0 0 20px">Quatro campos, uma vida inteira de céu</h2>
+<div style="border-radius:16px;padding:20px;background:rgba(35,37,50,.85);box-shadow:0 0 0 1px #423a6a">
+<div style="display:flex;flex-direction:column;gap:13px">
+<div class="field"><label>Nome completo</label><input class="input" placeholder="como no registro" style="min-height:44px"></div>
+<div class="field"><label>E-mail</label><input class="input" placeholder="voce@email.com" style="min-height:44px"></div>
+<div class="field"><label>Data e hora de nascimento</label>
+<div style="display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:8px;margin-bottom:8px"><input class="input" placeholder="dia" style="min-height:44px;text-align:center"><input class="input" placeholder="mês" style="min-height:44px;text-align:center"><input class="input" placeholder="ano" style="min-height:44px;text-align:center"></div>
+<input class="input" placeholder="hh:mm" style="min-height:44px;text-align:center"></div>
+<div class="field"><label>Cidade de nascimento</label><input class="input" placeholder="Belo Horizonte, MG · Brasil" style="min-height:44px"></div>
+</div>
+<a href="#1c" class="btn btn-primary btn-block" style="min-height:48px;font-size:15px;margin-top:18px;text-decoration:none">Revelar meu mapa</a>
+<p style="font-size:10.5px;line-height:1.5;color:#595d6c;text-align:center;margin:10px 0 0">Seus dados servem só ao cálculo do mapa.</p>
+</div>
+</div>
+<div style="padding:34px 22px 30px;border-top:1px solid rgba(233,233,237,.1)">
+<div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#9184d9;margin-bottom:10px">planos</div>
+<h2 style="font-size:26px;letter-spacing:-.03em;font-weight:500;margin:0 0 20px">O céu inteiro, não só a manchete</h2>
+<div style="display:flex;flex-direction:column;gap:12px">
+<sc-for list="{{ planCards }}" as="p" hint-placeholder-count="3">
+<div style="{{ p.cssMobile }}">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div style="font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:{{ p.ink }}">{{ p.name }}</div><span style="{{ p.tagCss }}">{{ p.tag }}</span></div>
+<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:14px"><div style="font-size:28px;letter-spacing:-.03em;font-variant-numeric:tabular-nums">{{ p.price }}</div><div style="font-size:11.5px;color:#75798c">{{ p.per }}</div></div>
+<a href="#1c" class="{{ p.btnClass }}" style="min-height:42px;width:100%;text-decoration:none;margin:0">{{ p.cta }}</a>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:14px;padding:20px 22px 26px;border-top:1px solid rgba(233,233,237,.1);font-size:11.5px;color:#75798c">
+<span style="letter-spacing:.2em">ASTROS</span><span>© 2026</span><a href="#1c" style="color:#75798c;text-decoration:none">Privacidade</a><a href="#1c" style="color:#75798c;text-decoration:none">Termos</a>
+</div>
+</div>
+</div>
+</div>
+<p class="dv-next">Próximos passos: "a roda do <a class="dv-oid" href="#1a">1a</a> com planetas e linhas de aspecto como na tela 03" · "mais opções de hero para <a class="dv-oid" href="#1a">1a</a>" · "tela de eclipse/lunário nova no app <a class="dv-oid" href="#1b">1b</a>"</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const GL={ari:'M3.5 18.5C3.5 8 7.5 4.5 12 9.5C16.5 4.5 20.5 8 20.5 18.5',tou:'M5.5 5.5C8 2.5 16 2.5 18.5 5.5 M6.4 14.9a5.6 5.6 0 1 0 11.2 0a5.6 5.6 0 1 0 -11.2 0',gem:'M4 4.5C7.5 6.5 16.5 6.5 20 4.5 M4 19.5C7.5 17.5 16.5 17.5 20 19.5 M7.5 5.8V18.2 M16.5 5.8V18.2',can:'M3.5 9C6 4.5 14 3.5 20.5 7 M20.5 15C18 19.5 10 20.5 3.5 17 M4 12.2a2.6 2.6 0 1 0 5.2 0a2.6 2.6 0 1 0 -5.2 0 M14.8 11.8a2.6 2.6 0 1 0 5.2 0a2.6 2.6 0 1 0 -5.2 0',leo:'M11.7 12.6a4 4 0 1 0 .7 3.4 M12.4 16C14.5 6 20 4.5 20 9.5C20 13 16.5 13.5 15 11',vir:'M3 6.5V17 M3 8.5C4 5.5 7 5.5 8 8.5V17 M8 8.5C9 5.5 12 5.5 13 8.5V15C13 18.5 15.5 19.5 17.5 17.5 M13 12.5C17.5 12 20 15 17 19',lib:'M2.5 18.5H21.5 M5 13.5H9.5 M14.5 13.5H19 M9.5 13.5C9 7 15 7 14.5 13.5',esc:'M2.5 6.5V17 M2.5 8.5C3.5 5.5 6.5 5.5 7.5 8.5V17 M7.5 8.5C8.5 5.5 11.5 5.5 12.5 8.5V17 M12.5 12.5L19 19 M19 19H14 M19 19V14',sag:'M5 19L18.5 5.5 M12 5.5H18.5V12 M7.5 12.5L13 18',cap:'M3.5 7C5.5 4 7.5 6 8.5 9L11 15.5 M8.5 9C10.5 5 15 5 16 10C16.8 14 13.5 15 12.5 13C15 11.5 19 13 19 16.2C19 19.5 15.5 20 14.2 17.6',aqu:'M3 10.5l3.6-3.4l3.6 3.4l3.6-3.4l3.6 3.4l3.6-3.4 M3 17l3.6-3.4l3.6 3.4l3.6-3.4l3.6 3.4l3.6-3.4',pei:'M7.5 3.5C3.5 8 3.5 16 7.5 20.5 M16.5 3.5C20.5 8 20.5 16 16.5 20.5 M4 12H20'};
+const SIGNS=[['ari','Áries','Fogo','21 mar – 19 abr'],['tou','Touro','Terra','20 abr – 20 mai'],['gem','Gêmeos','Ar','21 mai – 20 jun'],['can','Câncer','Água','21 jun – 22 jul'],['leo','Leão','Fogo','23 jul – 22 ago'],['vir','Virgem','Terra','23 ago – 22 set'],['lib','Libra','Ar','23 set – 22 out'],['esc','Escorpião','Água','23 out – 21 nov'],['sag','Sagitário','Fogo','22 nov – 21 dez'],['cap','Capricórnio','Terra','22 dez – 19 jan'],['aqu','Aquário','Ar','20 jan – 18 fev'],['pei','Peixes','Água','19 fev – 20 mar']];
+class Component extends DCLogic {
+  renderVals(){
+    let seed=29; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+    const field=(n,topPct)=>Array.from({length:n},()=>({css:`position:absolute;left:${(rnd()*100).toFixed(1)}%;top:${(rnd()*topPct).toFixed(1)}%;width:${(1+rnd()*1.8).toFixed(1)}px;height:${(1+rnd()*1.8).toFixed(1)}px;border-radius:999px;background:#e9e9ed;animation:lpTwinkle ${(2.5+rnd()*4).toFixed(1)}s ease-in-out ${(rnd()*5).toFixed(1)}s infinite`}));
+    const ringMarks=Array.from({length:12},(_,i)=>{const a=(i/12)*Math.PI*2;
+      const p=(r)=>[299+Math.cos(a)*r,299+Math.sin(a)*r];
+      const [x1,y1]=p(284),[x2,y2]=p(297);
+      return {x1:x1.toFixed(1),y1:y1.toFixed(1),x2:x2.toFixed(1),y2:y2.toFixed(1)};});
+    const bandCss=(last)=>`display:flex;align-items:center;gap:14px;padding:22px 28px;${last?'':'border-right:1px solid rgba(233,233,237,.1)'}`;
+    return {
+      heroStars: field(22,100), formStars: field(10,100), ringMarks,
+      liveBand:[
+        {k:'sol agora',v:'Leão 22°14′',glyph:'M3.5 12a8.5 8.5 0 1 0 17 0a8.5 8.5 0 1 0-17 0 M10.8 12a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0-2.4 0',css:bandCss(false)},
+        {k:'lua',v:'Peixes · minguante 68%',glyph:'M15 3.5A9.5 9.5 0 1 0 15 20.5A11.5 11.5 0 0 1 15 3.5',css:bandCss(false)},
+        {k:'retrógrados',v:'Mercúrio · Saturno',glyph:'M20 12a8 8 0 1 1-3.2-6.4 M20 4v5h-5',css:bandCss(false)},
+        {k:'próximo aspecto',v:'Vênus △ Netuno · 19h42',glyph:'M12 4l8 15H4z',css:bandCss(true)}],
+      signPlates:SIGNS.map(([k,name,el,dates])=>({glyph:GL[k],name,el,dates})),
+      steps:[{n:'01',t:'A carta primeiro',b:'Data, hora e coordenadas viram posições reais de planetas, casas e ângulos — Swiss Ephemeris, precisão de segundo de arco.'},
+        {n:'02',t:'O trânsito por cima',b:'O céu de hoje é sobreposto ao seu mapa. Só os aspectos que tocam a sua carta geram texto.'},
+        {n:'03',t:'A leitura, em quatro escalas',b:'Dia, semana, mês e ano — cada um com o aspecto regente nomeado, orbe e hora do encerramento.'}],
+      trust:[{t:'Hora desconhecida? Calculamos com meio-dia solar e marcamos o que fica incerto.'},
+        {t:'Fuso e horário de verão históricos resolvidos pela cidade, não pelo seu celular.'},
+        {t:'Três sistemas de casas — Placidus, Koch e casas iguais — trocáveis depois.'}],
+      planCards:[
+        {cssMobile:'border-radius:14px;padding:18px;background:#1c1e2c;box-shadow:0 0 0 1px #3f424d',name:'Ascendente',price:'Grátis',per:'para sempre',ink:'#9397ab',tag:'',tagCss:'display:none',
+         css:'border-radius:16px;padding:26px;background:#1c1e2c;box-shadow:0 0 0 1px #3f424d',btnClass:'btn btn-secondary',cta:'Criar conta',
+         perks:[{t:'Mapa natal completo com roda interativa'},{t:'Horóscopo diário resumido'},{t:'Trânsitos do dia'},{t:'Uma sinastria salva'}]},
+        {cssMobile:'border-radius:14px;padding:18px;background:linear-gradient(160deg,rgba(66,58,106,.6),#1c1e2c 70%);box-shadow:0 0 0 1.5px #9184d9',name:'Pleno',price:'R$ 129',per:'por ano · R$ 10,75/mês',ink:'#b5abfc',tag:'2 meses grátis',
+         tagCss:'font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:6px;background:#423a6a;color:#e7e5fe',
+         css:'border-radius:16px;padding:26px;background:linear-gradient(160deg,rgba(66,58,106,.6),#1c1e2c 70%);box-shadow:0 0 0 1.5px #9184d9,0 18px 44px rgba(0,0,0,.45)',btnClass:'btn btn-primary',cta:'Começar 7 dias grátis',
+         perks:[{t:'Leituras longas de dia, semana, mês e ano'},{t:'Alertas de trânsito na hora exata do aspecto'},{t:'Progressões, decanatos e revisão de casas'},{t:'Sinastria ilimitada e mapa em PDF'}]},
+        {cssMobile:'border-radius:14px;padding:18px;background:#1c1e2c;box-shadow:0 0 0 1px #3f424d',name:'Vitalício',price:'R$ 399',per:'pagamento único',ink:'#9397ab',tag:'',tagCss:'display:none',
+         css:'border-radius:16px;padding:26px;background:#1c1e2c;box-shadow:0 0 0 1px #3f424d',btnClass:'btn btn-secondary',cta:'Comprar uma vez',
+         perks:[{t:'Tudo do Pleno, sem renovação'},{t:'Novos módulos incluídos'},{t:'Suporte por e-mail em 24h'},{t:'Transferível entre dispositivos'}]}],
+      phones:[
+        {n:'01',screen:'auth',label:'Cadastro · passo 1',note:'Nome, e-mail e senha. Os pontos no topo mostram o progresso; toque em Continuar para ver os passos 2 e 3 (data/hora e cidade).'},
+        {n:'02',screen:'home',label:'Hoje',note:'Sol atual com grau e decanato, lua, cor e número do dia, trânsitos, retrógrados em curso e o alerta pessoal.'},
+        {n:'03',screen:'mapa',label:'Mapa natal',note:'Roda com casas, graus, planetas e linhas de aspecto. Toque num signo do anel externo para abrir a faixa de detalhe.'},
+        {n:'04',screen:'horoscopo',label:'Horóscopo',note:'Dia, semana, mês e ano — troque o período no segmentado e o texto todo muda.'},
+        {n:'05',screen:'signo',label:'Perfil do signo',note:'Placa gravada girando, tabela de atributos, virtudes e sombra. A tira inferior troca de signo.'},
+        {n:'06',screen:'sinastria',label:'Sinastria',note:'Anel de afinidade, quatro eixos e a lista de aspectos entre os dois mapas.'},
+        {n:'07',screen:'premium',label:'Planos',note:'Emblema solar gravado, três planos selecionáveis e a lista do que entra no Pleno.'},
+        {n:'08',screen:'ajustes',label:'Perfil e ajustes',note:'Dados de nascimento editáveis, sistema de casas, notificações com switches e conta.'}]
+    };
+  }
+}
+</script>
+</body>
+</html>

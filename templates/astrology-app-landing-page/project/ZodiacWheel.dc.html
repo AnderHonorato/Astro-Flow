@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/nocturne-dae32a1b-95d2-4f36-863b-0d9f6c90f957/styles.css">
+<script src="_ds/nocturne-dae32a1b-95d2-4f36-863b-0d9f6c90f957/_ds_bundle.js"></script>
+</helmet>
+<div style="position:relative;width:100%;aspect-ratio:1/1;display:block">
+<svg viewBox="0 0 400 400" width="100%" height="100%" style="display:block;overflow:visible">
+<defs>
+<radialGradient id="zwSun" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#f5f4ff" stop-opacity="0.95"></stop>
+<stop offset="45%" stop-color="#b5abfc" stop-opacity="0.35"></stop>
+<stop offset="100%" stop-color="#9184d9" stop-opacity="0"></stop>
+</radialGradient>
+<radialGradient id="zwVoid" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#1b1e30"></stop>
+<stop offset="100%" stop-color="#12141f"></stop>
+</radialGradient>
+<pattern id="zwHatch" width="6" height="6" patternTransform="rotate(35)" patternUnits="userSpaceOnUse">
+<line x1="0" y1="0" x2="0" y2="6" stroke="#9184d9" stroke-opacity="0.22" stroke-width="1"></line>
+</pattern>
+<filter id="zwGlow" x="-60%" y="-60%" width="220%" height="220%">
+<feGaussianBlur stdDeviation="3.2" result="b"></feGaussianBlur>
+<feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+</filter>
+</defs>
+
+<circle cx="200" cy="200" r="196" fill="url(#zwVoid)"></circle>
+<sc-for list="{{ stars }}" as="st" hint-placeholder-count="26">
+<circle cx="{{ st.x }}" cy="{{ st.y }}" r="{{ st.r }}" fill="#e9e9ed" opacity="{{ st.o }}"></circle>
+</sc-for>
+
+<circle cx="200" cy="200" r="192" fill="none" stroke="#595d6c" stroke-width="0.6" opacity="0.7"></circle>
+<circle cx="200" cy="200" r="188" fill="none" stroke="#9184d9" stroke-width="0.5" opacity="0.45"></circle>
+
+<sc-for list="{{ ticks }}" as="tk" hint-placeholder-count="72">
+<line x1="{{ tk.x1 }}" y1="{{ tk.y1 }}" x2="{{ tk.x2 }}" y2="{{ tk.y2 }}" stroke="#b2b6ca" stroke-width="{{ tk.w }}" opacity="{{ tk.o }}"></line>
+</sc-for>
+
+<sc-for list="{{ segs }}" as="s" hint-placeholder-count="12">
+<g style="cursor:pointer" onClick="{{ s.onClick }}">
+<path d="{{ s.d }}" fill="{{ s.fill }}" stroke="#595d6c" stroke-width="0.7" opacity="0.95"></path>
+<path d="{{ s.d }}" fill="url(#zwHatch)" opacity="{{ s.hatch }}"></path>
+<g transform="{{ s.gt }}"><path d="{{ s.glyph }}" fill="none" stroke="{{ s.gStroke }}" stroke-width="{{ s.gWidth }}" stroke-linecap="round" stroke-linejoin="round"></path></g>
+</g>
+</sc-for>
+
+<circle cx="200" cy="200" r="152" fill="none" stroke="#595d6c" stroke-width="0.7" opacity="0.8"></circle>
+<circle cx="200" cy="200" r="118" fill="none" stroke="#595d6c" stroke-width="0.7" opacity="0.8"></circle>
+<circle cx="200" cy="200" r="114" fill="none" stroke="#9184d9" stroke-width="0.5" opacity="0.35"></circle>
+
+<sc-for list="{{ cusps }}" as="c" hint-placeholder-count="12">
+<line x1="{{ c.x1 }}" y1="{{ c.y1 }}" x2="{{ c.x2 }}" y2="{{ c.y2 }}" stroke="{{ c.stroke }}" stroke-width="{{ c.w }}" stroke-dasharray="{{ c.dash }}" opacity="0.9"></line>
+<text x="{{ c.nx }}" y="{{ c.ny }}" fill="#b2b6ca" font-size="8" font-family="Inter, system-ui" text-anchor="middle" dominant-baseline="middle" opacity="0.85" style="font-variant-numeric:tabular-nums">{{ c.num }}</text>
+</sc-for>
+
+<sc-for list="{{ aspects }}" as="a" hint-placeholder-count="9">
+<line x1="{{ a.x1 }}" y1="{{ a.y1 }}" x2="{{ a.x2 }}" y2="{{ a.y2 }}" stroke="{{ a.stroke }}" stroke-width="{{ a.w }}" stroke-dasharray="{{ a.dash }}" opacity="{{ a.o }}"></line>
+</sc-for>
+
+<circle cx="200" cy="200" r="52" fill="url(#zwSun)" opacity="{{ coreOpacity }}"></circle>
+<sc-for list="{{ rays }}" as="ry" hint-placeholder-count="24">
+<path d="{{ ry.d }}" fill="#e7e5fe" opacity="{{ ry.o }}"></path>
+</sc-for>
+<circle cx="200" cy="200" r="{{ coreR }}" fill="none" stroke="#d2cefd" stroke-width="0.8" opacity="0.6"></circle>
+
+<sc-for list="{{ planets }}" as="p" hint-placeholder-count="10">
+<g style="cursor:pointer">
+<line x1="{{ p.lx1 }}" y1="{{ p.ly1 }}" x2="{{ p.lx2 }}" y2="{{ p.ly2 }}" stroke="#9184d9" stroke-width="0.6" opacity="0.5"></line>
+<circle cx="{{ p.cx }}" cy="{{ p.cy }}" r="10" fill="#161826" stroke="{{ p.ring }}" stroke-width="0.8" opacity="0.96"></circle>
+<g transform="{{ p.gt }}"><path d="{{ p.glyph }}" fill="none" stroke="{{ p.ink }}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></g>
+<text x="{{ p.dx }}" y="{{ p.dy }}" fill="#9397ab" font-size="6.5" font-family="Inter, system-ui" text-anchor="middle" style="font-variant-numeric:tabular-nums">{{ p.degLabel }}</text>
+</g>
+</sc-for>
+</svg>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:460,&quot;height&quot;:460},&quot;asc&quot;:{&quot;editor&quot;:&quot;float&quot;,&quot;default&quot;:228.5,&quot;tsType&quot;:&quot;number&quot;,&quot;min&quot;:0,&quot;max&quot;:360,&quot;step&quot;:0.5,&quot;unit&quot;:&quot;°&quot;,&quot;section&quot;:&quot;Chart&quot;},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;chart&quot;,&quot;options&quot;:[&quot;chart&quot;,&quot;celestial&quot;],&quot;tsType&quot;:&quot;'chart'|'celestial'&quot;,&quot;section&quot;:&quot;Chart&quot;},&quot;activeSign&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string|null&quot;},&quot;onSelectSign&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;(k:string)=&gt;void&quot;}}">
+const GL = {
+  ari:'M3.5 18.5C3.5 8 7.5 4.5 12 9.5C16.5 4.5 20.5 8 20.5 18.5',
+  tou:'M5.5 5.5C8 2.5 16 2.5 18.5 5.5 M6.4 14.9a5.6 5.6 0 1 0 11.2 0a5.6 5.6 0 1 0 -11.2 0',
+  gem:'M4 4.5C7.5 6.5 16.5 6.5 20 4.5 M4 19.5C7.5 17.5 16.5 17.5 20 19.5 M7.5 5.8V18.2 M16.5 5.8V18.2',
+  can:'M3.5 9C6 4.5 14 3.5 20.5 7 M20.5 15C18 19.5 10 20.5 3.5 17 M4 12.2a2.6 2.6 0 1 0 5.2 0a2.6 2.6 0 1 0 -5.2 0 M14.8 11.8a2.6 2.6 0 1 0 5.2 0a2.6 2.6 0 1 0 -5.2 0',
+  leo:'M11.7 12.6a4 4 0 1 0 .7 3.4 M12.4 16C14.5 6 20 4.5 20 9.5C20 13 16.5 13.5 15 11',
+  vir:'M3 6.5V17 M3 8.5C4 5.5 7 5.5 8 8.5V17 M8 8.5C9 5.5 12 5.5 13 8.5V15C13 18.5 15.5 19.5 17.5 17.5 M13 12.5C17.5 12 20 15 17 19',
+  lib:'M2.5 18.5H21.5 M5 13.5H9.5 M14.5 13.5H19 M9.5 13.5C9 7 15 7 14.5 13.5',
+  esc:'M2.5 6.5V17 M2.5 8.5C3.5 5.5 6.5 5.5 7.5 8.5V17 M7.5 8.5C8.5 5.5 11.5 5.5 12.5 8.5V17 M12.5 12.5L19 19 M19 19H14 M19 19V14',
+  sag:'M5 19L18.5 5.5 M12 5.5H18.5V12 M7.5 12.5L13 18',
+  cap:'M3.5 7C5.5 4 7.5 6 8.5 9L11 15.5 M8.5 9C10.5 5 15 5 16 10C16.8 14 13.5 15 12.5 13C15 11.5 19 13 19 16.2C19 19.5 15.5 20 14.2 17.6',
+  aqu:'M3 10.5l3.6-3.4l3.6 3.4l3.6-3.4l3.6 3.4l3.6-3.4 M3 17l3.6-3.4l3.6 3.4l3.6-3.4l3.6 3.4l3.6-3.4',
+  pei:'M7.5 3.5C3.5 8 3.5 16 7.5 20.5 M16.5 3.5C20.5 8 20.5 16 16.5 20.5 M4 12H20'
+};
+const PL = {
+  sol:'M3.5 12a8.5 8.5 0 1 0 17 0a8.5 8.5 0 1 0-17 0 M10.8 12a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0-2.4 0',
+  lua:'M15 3.5A9.5 9.5 0 1 0 15 20.5A11.5 11.5 0 0 1 15 3.5',
+  mer:'M8 12a4 4 0 1 0 8 0a4 4 0 1 0-8 0 M12 16v5 M9.5 19h5 M8.5 3.5C9 7 15 7 15.5 3.5',
+  ven:'M8 9a4 4 0 1 0 8 0a4 4 0 1 0-8 0 M12 13v8 M9 17.5h6',
+  mar:'M4.5 15.5a5.5 5.5 0 1 0 11 0a5.5 5.5 0 1 0-11 0 M14 12L20 6 M15 5.5h5v5',
+  jup:'M4.5 7C6 4 10.5 4.5 10 8.5C9.6 12 5 14.5 5 14.5 M10 8.5V19 M4 19h13',
+  sat:'M4 7h7 M7.5 3.5V13.5 M7.5 13.5C11.5 12 15 13.5 15 17.5C15 20.5 12 21 10.5 19',
+  ura:'M9.6 18.1a2.4 2.4 0 1 0 4.8 0a2.4 2.4 0 1 0-4.8 0 M12 15.7V3.5 M8 7.5h8',
+  nep:'M4.5 7.5C4.5 15 19.5 15 19.5 7.5 M4.5 7.5V10.5 M19.5 7.5V10.5 M12 5V21 M8 18.5h8',
+  plu:'M6 20.5V6.5H10a3.5 3.5 0 0 1 0 7H6 M13.5 6.5V20.5h5.5'
+};
+const SIGNS = [
+  {k:'ari',n:'Áries',el:'fogo'},{k:'tou',n:'Touro',el:'terra'},{k:'gem',n:'Gêmeos',el:'ar'},
+  {k:'can',n:'Câncer',el:'agua'},{k:'leo',n:'Leão',el:'fogo'},{k:'vir',n:'Virgem',el:'terra'},
+  {k:'lib',n:'Libra',el:'ar'},{k:'esc',n:'Escorpião',el:'agua'},{k:'sag',n:'Sagitário',el:'fogo'},
+  {k:'cap',n:'Capricórnio',el:'terra'},{k:'aqu',n:'Aquário',el:'ar'},{k:'pei',n:'Peixes',el:'agua'}
+];
+const EL_FILL = {fogo:'rgba(145,132,217,0.14)',terra:'rgba(63,66,77,0.55)',ar:'rgba(167,161,219,0.09)',agua:'rgba(38,42,96,0.62)'};
+const BODIES = [
+  {k:'sol',n:'Sol',lon:142.23},{k:'lua',n:'Lua',lon:338.03},{k:'mer',n:'Mercúrio',lon:155.68},
+  {k:'ven',n:'Vênus',lon:107.88},{k:'mar',n:'Marte',lon:89.13},{k:'jup',n:'Júpiter',lon:41.6},
+  {k:'sat',n:'Saturno',lon:3.32},{k:'ura',n:'Urano',lon:56.75},{k:'nep',n:'Netuno',lon:0.2},
+  {k:'plu',n:'Plutão',lon:301.55}
+];
+const CUSPS = [228.5,258,289,320.5,353,25,48.5,78,109,140.5,173,205];
+const ASPECTS = [[0,6],[0,4],[1,3],[2,4],[3,5],[5,7],[6,8],[7,9],[1,8],[2,9]];
+
+class Component extends DCLogic {
+  pt(lon, r) {
+    const asc = this.props.asc ?? 228.5;
+    const a = (lon - asc) * Math.PI / 180;
+    return [200 - r * Math.cos(a), 200 + r * Math.sin(a)];
+  }
+  arc(rO, rI, a0, a1) {
+    const [x1,y1]=this.pt(a0,rO), [x2,y2]=this.pt(a1,rO), [x3,y3]=this.pt(a1,rI), [x4,y4]=this.pt(a0,rI);
+    const f=(n)=>n.toFixed(2);
+    return `M${f(x1)} ${f(y1)} A${rO} ${rO} 0 0 0 ${f(x2)} ${f(y2)} L${f(x3)} ${f(y3)} A${rI} ${rI} 0 0 1 ${f(x4)} ${f(y4)} Z`;
+  }
+  gt(lon, r, scale) {
+    const [x,y]=this.pt(lon,r);
+    return `translate(${(x - 12*scale).toFixed(2)} ${(y - 12*scale).toFixed(2)}) scale(${scale})`;
+  }
+  renderVals() {
+    const active = this.props.activeSign;
+    const celestial = (this.props.variant ?? 'chart') === 'celestial';
+    const onSelect = this.props.onSelectSign;
+
+    const segs = SIGNS.map((s,i)=>{
+      const on = active === s.k;
+      return {
+        ...s,
+        d: this.arc(178, 152, i*30, i*30+30),
+        fill: on ? 'rgba(145,132,217,0.34)' : EL_FILL[s.el],
+        hatch: s.el==='terra' ? 0.55 : (s.el==='fogo' ? 0.3 : 0.14),
+        gt: this.gt(i*30+15, 165, 0.82),
+        glyph: GL[s.k],
+        gStroke: on ? '#f5f4ff' : '#d2cefd',
+        gWidth: on ? 2 : 1.5,
+        onClick: onSelect ? () => onSelect(s.k) : undefined
+      };
+    });
+
+    const ticks = [];
+    for (let d=0; d<360; d+=2){
+      const major = d % 10 === 0, mid = d % 5 === 0;
+      const len = major ? 9 : mid ? 5.5 : 2.8;
+      const [x1,y1]=this.pt(d,152), [x2,y2]=this.pt(d,152+len);
+      ticks.push({x1:x1.toFixed(2),y1:y1.toFixed(2),x2:x2.toFixed(2),y2:y2.toFixed(2),w:major?0.8:0.5,o:major?0.55:0.3});
+    }
+
+    const cusps = CUSPS.map((lon,i)=>{
+      const ang = i===0||i===3||i===6||i===9;
+      const [x1,y1]=this.pt(lon,118), [x2,y2]=this.pt(lon, ang?188:152);
+      const [nx,ny]=this.pt(lon+ (CUSPS[(i+1)%12]-lon+360)%360/2, 126);
+      return {x1:x1.toFixed(2),y1:y1.toFixed(2),x2:x2.toFixed(2),y2:y2.toFixed(2),
+        stroke: ang ? '#b5abfc' : '#595d6c', w: ang ? 1.1 : 0.55, dash: ang ? 'none' : '3 3',
+        num: i+1, nx:nx.toFixed(2), ny:ny.toFixed(2)};
+    });
+
+    const sorted = [...BODIES].sort((a,b)=>a.lon-b.lon);
+    const placed = sorted.map((b,i)=>{
+      const prev = sorted[(i-1+sorted.length)%sorted.length];
+      let gap = ((b.lon - prev.lon)+360)%360;
+      const r = gap < 9 ? 84 : 100;
+      const [cx,cy]=this.pt(b.lon,r);
+      const [lx1,ly1]=this.pt(b.lon,114), [lx2,ly2]=this.pt(b.lon,r+10);
+      const [dx,dy]=this.pt(b.lon, r-15);
+      const deg = Math.floor(b.lon%30), min = Math.round((b.lon%1)*60);
+      return {...b, cx:cx.toFixed(2), cy:cy.toFixed(2), gt:this.gt(b.lon,r,0.58), glyph:PL[b.k],
+        ink: b.k==='sol'||b.k==='lua' ? '#f5f4ff' : '#d2cefd', ring: b.k==='sol' ? '#b5abfc' : '#595d6c',
+        lx1:lx1.toFixed(2),ly1:ly1.toFixed(2),lx2:lx2.toFixed(2),ly2:ly2.toFixed(2),
+        dx:dx.toFixed(2), dy:(dy+2).toFixed(2), degLabel:`${deg}°${String(min).padStart(2,'0')}`};
+    });
+
+    const idx = {}; BODIES.forEach((b,i)=>idx[b.k]=b);
+    const aspects = ASPECTS.map(([a,b])=>{
+      const A=BODIES[a], B=BODIES[b];
+      let sep = Math.abs(A.lon-B.lon)%360; if (sep>180) sep = 360-sep;
+      const soft = [60,120].some(t=>Math.abs(sep-t)<14);
+      const [x1,y1]=this.pt(A.lon,114), [x2,y2]=this.pt(B.lon,114);
+      return {x1:x1.toFixed(2),y1:y1.toFixed(2),x2:x2.toFixed(2),y2:y2.toFixed(2),
+        stroke: soft ? '#9184d9' : '#75798c', w: soft ? 0.8 : 0.6, dash: soft ? 'none' : '4 3', o: soft ? 0.75 : 0.5};
+    });
+
+    const stars = [];
+    let seed = 7;
+    const rnd = ()=> (seed = (seed*16807)%2147483647)/2147483647;
+    for (let i=0;i<70;i++){
+      const a = rnd()*Math.PI*2, rr = 180 + rnd()*14;
+      stars.push({x:(200+Math.cos(a)*rr).toFixed(1), y:(200+Math.sin(a)*rr).toFixed(1), r:(0.4+rnd()*1.1).toFixed(2), o:(0.25+rnd()*0.6).toFixed(2)});
+    }
+
+    const rays = [];
+    const nRays = 28;
+    for (let i=0;i<nRays;i++){
+      const a = (i/nRays)*Math.PI*2, long = i%2===0;
+      const rIn = 30, rOut = long ? 50 : 40, w = long ? 0.055 : 0.035;
+      const p = (ang,r)=>`${(200+Math.cos(ang)*r).toFixed(2)} ${(200+Math.sin(ang)*r).toFixed(2)}`;
+      rays.push({d:`M${p(a-w,rIn)} L${p(a,rOut)} L${p(a+w,rIn)} Z`, o: long ? 0.85 : 0.5});
+    }
+
+    return {
+      segs, ticks, cusps, aspects, stars, planets: celestial ? [] : placed,
+      rays: celestial ? rays : [], coreOpacity: celestial ? 1 : 0.5, coreR: celestial ? 30 : 22
+    };
+  }
+}
+</script>
+</body>
+</html>

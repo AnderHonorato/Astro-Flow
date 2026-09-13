@@ -1,0 +1,183 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Astros — schema do banco
+//
+// PROVIDER: SQLite. Escolhido porque roda sem infraestrutura nenhuma (nao ha
+// Docker nesta maquina). O schema foi escrito para ser PORTAVEL para Postgres
+// sem reescrita de modelagem:
+//
+//   • Nada de enums nativos. Todos os campos "enumerados" (plan, status,
+//     houseSystem) sao `String`; os valores validos vivem no zod de
+//     `@astros/contracts` (planKeySchema, houseSystemSchema, ...) e sao
+//     validados na borda da API, nunca no banco.
+//   • Nada de colunas `Json` guardando arrays. Tudo que precisaria de consulta
+//     esta em coluna propria (ex.: os campos de nascimento sao achatados em
+//     BirthRecord / SynastryPartner em vez de um blob).
+//   • Nada de atributos especificos do Postgres (@db.*, arrays nativos,
+//     @@index(type: Gin), citext...). Datas sao `DateTime`, dinheiro nao existe
+//     ainda, ids sao uuid gerados pela aplicacao.
+//   • Busca case/acento-insensivel nao depende de `mode: 'insensitive'` (que o
+//     SQLite nao suporta): `Place.searchKey` guarda o nome ja normalizado
+//     (minusculo, sem acento) e a consulta normaliza o termo do mesmo jeito.
+//     Isso funciona identico nos dois bancos.
+//
+// PARA MIGRAR PARA POSTGRES:
+//   1. `docker compose up -d postgres` na raiz do repo.
+//   2. Troque `provider = "sqlite"` por `provider = "postgresql"` abaixo.
+//   3. Em `apps/api/.env`, use a URL documentada em `.env.example`:
+//      DATABASE_URL="postgresql://astros:astros@localhost:5433/astros?schema=public"
+//   4. Apague `apps/api/prisma/migrations/` e rode `npx prisma migrate dev
+//      --name init` de novo (as migrations sao SQL especifico do dialeto).
+//   5. `npx tsx prisma/seed.ts`.
+// Nenhuma mudanca de modelo ou de codigo da aplicacao e necessaria.
+// ─────────────────────────────────────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// Conta. `passwordHash` NUNCA sai daqui — veja src/mappers.ts.
+model User {
+  id           String @id @default(uuid())
+  name         String
+  email        String @unique
+  passwordHash String
+
+  /// Preferencias (achatadas: consultaveis e portaveis).
+  timezone    String @default("America/Sao_Paulo")
+  /// houseSystemSchema: placidus | koch | equal
+  houseSystem String @default("placidus")
+
+  notifyDailyHoroscope Boolean @default(true)
+  notifyTransitAlerts  Boolean @default(true)
+  notifyMoonPhases     Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  birth         BirthRecord?
+  subscription  Subscription?
+  refreshTokens RefreshToken[]
+  partners      SynastryPartner[]
+}
+
+/// Dados de nascimento do titular da conta — 1:1 com User.
+model BirthRecord {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// Data civil local, YYYY-MM-DD (string: e uma data civil, nao um instante).
+  date String
+  /// Hora civil local HH:mm; null = desconhecida (motor cai para meio-dia).
+  time String?
+
+  placeName   String
+  region      String?
+  countryCode String
+  latitude    Float
+  longitude   Float
+  /// IANA — resolve DST historico no motor.
+  timezone    String
+
+  /// houseSystemSchema
+  houseSystem String @default("placidus")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// Refresh token opaco. Guardamos apenas o SHA-256; o valor cru so existe na
+/// resposta HTTP. `familyId` liga a linhagem de rotacoes: reuso de um token ja
+/// rotacionado revoga a familia inteira.
+model RefreshToken {
+  id        String @id @default(uuid())
+  tokenHash String @unique
+  familyId  String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([familyId])
+  @@index([expiresAt])
+}
+
+/// Assinatura. Sem PSP real ainda — ver src/routes/billing.ts.
+model Subscription {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// planKeySchema: free | full | lifetime
+  plan   String @default("free")
+  /// active | trialing | canceled | expired
+  status String @default("active")
+
+  currentPeriodEnd DateTime?
+  trialEndsAt      DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([plan])
+}
+
+/// Parceiro salvo para sinastria. Campos de nascimento achatados, igual a
+/// BirthRecord (nao ha 1:1 com User, entao nao da para reusar a tabela).
+model SynastryPartner {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name String
+
+  date String
+  time String?
+
+  placeName   String
+  region      String?
+  countryCode String
+  latitude    Float
+  longitude   Float
+  timezone    String
+
+  houseSystem String @default("placidus")
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([userId, createdAt])
+}
+
+/// Catalogo local de cidades — autocomplete offline, sem depender do
+/// geocoder externo. Semeado por prisma/seed.ts.
+model Place {
+  id String @id @default(uuid())
+
+  name        String
+  region      String?
+  countryCode String
+  latitude    Float
+  longitude   Float
+  timezone    String
+
+  /// Nome normalizado (minusculo, sem acento) — a chave de busca portavel.
+  searchKey String
+  /// Ordena a lista: cidade maior primeiro.
+  population Int @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@unique([name, region, countryCode])
+  @@index([searchKey])
+  @@index([population])
+}

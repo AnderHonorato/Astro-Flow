@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-tema="grau">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trinta Graus — o que cabe em cada um dos doze signos</title>
+<meta name="description" content="Ebook de 214 páginas que trata os doze signos como eles são: doze faixas de trinta graus, cada uma com uma lógica própria. Sem previsão, sem promessa de transformação.">
+<meta name="theme-color" content="#E9E7E1">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Apenas os pesos realmente usados. Fraunces 400 = texto do livro, 700 = display.
+     Bricolage 800 = display do ECLIPSE. Instrument Serif 400 + itálico = display do EFEMÉRIDE. -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700&family=Instrument+Serif:ital@0;1&family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Karla:wght@400;500;700&family=Public+Sans:wght@400;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================================
+   TRINTA GRAUS — landing page
+   Arquivo único. Três direções de arte no mesmo HTML, trocáveis em [data-tema].
+
+   ARQUITETURA CSS
+   :root ................ tokens compartilhados (ritmo, escala, motion)
+   [data-tema="..."] .... tokens de cor e tipografia por direção
+   .bloco / .cartao ..... componentes, sempre em UMA classe (0,1,0)
+   [data-tema] .bloco ... ajustes por direção (0,2,0) — nunca se anulam
+   ========================================================================== */
+
+/* --- reset enxuto -------------------------------------------------------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body,h1,h2,h3,h4,p,figure,blockquote,dl,dd,ul,ol{margin:0}
+ul[class],ol[class]{list-style:none;padding:0}
+img,svg{max-width:100%;display:block}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+
+/* --------------------------------------------------------------------------
+   TOKENS COMPARTILHADOS — ritmo, escala e movimento são os mesmos nas 3 direções.
+   É isso que faz as três parecerem o mesmo produto vestido de três jeitos.
+   -------------------------------------------------------------------------- */
+:root{
+  --gap-1:.5rem;  --gap-2:1rem;   --gap-3:1.5rem; --gap-4:2rem;
+  --gap-5:2.5rem; --gap-6:3rem;   --gap-8:4rem;   --gap-10:5rem;
+  --gap-12:6rem;  --gap-16:8rem;
+
+  --pag:76rem;
+  --medida:36rem;
+  --pad-x:clamp(1.25rem,5vw,4rem);
+  --pad-y:clamp(3.5rem,9vw,7.5rem);
+  --rail:0rem;                     /* espaço da régua; cresce no desktop */
+
+  --fs-micro:.6875rem;
+  --fs-nota:.75rem;
+  --fs-peq:.8125rem;
+  --fs-base:clamp(1rem,.97rem + .18vw,1.125rem);
+  --fs-lead:clamp(1rem,.93rem + .58vw,1.4375rem);
+  --fs-h4:clamp(1rem,.95rem + .3vw,1.15rem);
+  --fs-h3:clamp(1.2rem,1.05rem + .75vw,1.65rem);
+  --fs-h2:clamp(1.7rem,1.2rem + 2.3vw,3.15rem);
+  --fs-h1:clamp(2.3rem,1.35rem + 4.6vw,5rem);
+  --fs-numeral:clamp(2.2rem,1.2rem + 4.6vw,4.5rem);
+
+  --t-rapido:150ms; --t-medio:320ms; --t-lento:720ms;
+  --ease:cubic-bezier(.2,.7,.3,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+
+  --prog:0;                        /* progresso de rolagem 0→1, escrito pelo JS */
+}
+
+/* --------------------------------------------------------------------------
+   DIREÇÃO C — GRAU  ·  o zodíaco como medida
+   Superfície fria de gesso, tinta quase preta, âmbar como agulha.
+   Contrastes: texto 10,0:1 · vitral 5,9:1 · botão âmbar/tinta 8,3:1
+   -------------------------------------------------------------------------- */
+[data-tema="grau"]{
+  --bg:#E9E7E1;
+  --superficie:#FAFAF8;
+  --texto:#2C3A42;          /*  9,48:1 sobre bg  */
+  --titulo:#101418;         /* 14,96:1           */
+  --sutil:#52616A;          /*  5,18:1           */
+  --linha:#C9C7C0;
+  --linha-forte:#101418;
+  --acento:#E8A33D;         /* âmbar SÓ como preenchimento, sempre com texto escuro */
+  --acento-txt:#8A5A0E;     /* âmbar queimado: âmbar como TEXTO/fio — 4,78:1 */
+  --acento-fundo:#E8A33D;
+  --acento-texto:#101418;   /*  8,58:1 dentro do botão  */
+  --acento2:#245A68;        /*  6,20:1           */
+  /* seções invertidas (.escuro) e a capa: em GRAU o inverso é tinta */
+  --inv-bg:#101418; --inv-sup:#1B2028; --inv-texto:#C3CDD4; --inv-titulo:#E9E7E1;
+  --inv-sutil:#97A5AE; --inv-linha:#2A323A; --inv-acento:#E8A33D; --inv-acento2:#7FC6D8;
+  /* a página do livro é papel nas três direções */
+  --pagina-bg:#FAFAF8; --pagina-texto:#2C3A42; --pagina-sutil:#52616A;
+  --pagina-linha:#D9D7D1; --pagina-acento:#8A5A0E;
+  --display:"Fraunces",Georgia,serif;
+  --corpo:"Karla",system-ui,sans-serif;
+  --mono:"Space Mono",ui-monospace,monospace;
+  --peso-display:700;
+  --track-display:-.025em;
+  --track-mono:.06em;
+  --r-card:3px;
+  --borda-card:1px solid var(--linha);
+  --font-var-display:"SOFT" 20,"WONK" 1;
+  --rail-desktop:6.5rem;
+}
+/* --------------------------------------------------------------------------
+   DIREÇÃO A — EFEMÉRIDE  ·  dado como ornamento
+   Anuário astronômico. Fios de 1px, numerais tabulares, latão e cobalto claro.
+   Contrastes: névoa/nanquim 8,5:1 · latão 6,6:1 · cobalto claro 6,5:1
+   -------------------------------------------------------------------------- */
+[data-tema="efemeride"]{
+  --bg:#0E1420;
+  --superficie:#1B2433;
+  --texto:#A8B2C4;          /*  8,63:1 sobre bg  */
+  --titulo:#F2F0EB;         /* 16,18:1           */
+  --sutil:#8B98AC;          /*  6,30:1           */
+  --linha:#2B3547;
+  --linha-forte:#C79A3F;
+  --acento:#C79A3F;
+  --acento-txt:#C79A3F;     /*  7,13:1 — em tema escuro o latão já passa como texto */
+  --acento-fundo:#C79A3F;
+  --acento-texto:#0E1420;   /*  7,13:1 dentro do botão  */
+  --acento2:#7B96FF;        /*  6,71:1           */
+  /* em EFEMÉRIDE o inverso é papel: o acento precisa escurecer junto */
+  --inv-bg:#F2F0EB; --inv-sup:#FFFFFF; --inv-texto:#333C4D; --inv-titulo:#0E1420;
+  --inv-sutil:#5A6478; --inv-linha:#D6D3CB; --inv-acento:#8A6410; --inv-acento2:#2440B8;
+  --pagina-bg:#FFFFFF; --pagina-texto:#2A3243; --pagina-sutil:#5A6478;
+  --pagina-linha:#D9D6CE; --pagina-acento:#8A6410;
+  --display:"Instrument Serif",Georgia,serif;
+  --corpo:"Public Sans",system-ui,sans-serif;
+  --mono:"Space Mono",ui-monospace,monospace;
+  --peso-display:400;
+  --track-display:-.015em;
+  --track-mono:.08em;
+  --r-card:0px;
+  --borda-card:1px solid var(--linha);
+  --font-var-display:normal;
+  --rail-desktop:0rem;
+}
+/* --------------------------------------------------------------------------
+   DIREÇÃO B — ECLIPSE  ·  papel recortado
+   Breu quente, osso, magenta e verde-vidro. Tipo pesado, formas que se ocultam.
+   Contrastes: areia/breu 9,6:1 · magenta 5,9:1 · verde 8,4:1
+   -------------------------------------------------------------------------- */
+[data-tema="eclipse"]{
+  --bg:#1A1512;
+  --superficie:#241D18;
+  --texto:#C9BCA8;          /*  9,69:1 sobre bg  */
+  --titulo:#F0EAE0;         /* 15,13:1           */
+  --sutil:#A2937B;          /*  6,03:1           */
+  --linha:#3A2F26;
+  --linha-forte:#FF5C87;
+  --acento:#FF5C87;
+  --acento-txt:#FF5C87;     /*  6,15:1           */
+  --acento-fundo:#FF5C87;
+  --acento-texto:#1A1512;   /*  6,15:1 dentro do botão  */
+  --acento2:#4FC7A6;        /*  8,67:1           */
+  /* em ECLIPSE o inverso é osso: magenta escurece para #C4144B */
+  --inv-bg:#F0EAE0; --inv-sup:#FBF7F1; --inv-texto:#4A4038; --inv-titulo:#1A1512;
+  --inv-sutil:#6B5F52; --inv-linha:#DDD5C9; --inv-acento:#C4144B; --inv-acento2:#0F6B55;
+  --pagina-bg:#FBF7F1; --pagina-texto:#4A4038; --pagina-sutil:#6B5F52;
+  --pagina-linha:#E0D8CC; --pagina-acento:#C4144B;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --corpo:"Karla",system-ui,sans-serif;
+  --mono:"Space Mono",ui-monospace,monospace;
+  --peso-display:800;
+  --track-display:-.035em;
+  --track-mono:.06em;
+  --r-card:14px;
+  --borda-card:1px solid var(--linha);
+  --font-var-display:normal;
+  --rail-desktop:0rem;
+}
+
+/* --------------------------------------------------------------------------
+   BASE
+   -------------------------------------------------------------------------- */
+body{
+  background:var(--bg);
+  color:var(--texto);
+  font-family:var(--corpo);
+  font-size:var(--fs-base);
+  line-height:1.65;
+  /* `clip` e não `hidden`: hidden promove overflow-y para auto e transforma o body
+     em contêiner de rolagem — quebra rolagem no iOS e position:sticky interno. */
+  overflow-x:clip;
+  transition:background-color var(--t-medio) var(--ease),color var(--t-medio) var(--ease);
+}
+h1,h2,h3{
+  font-family:var(--display);
+  font-weight:var(--peso-display);
+  letter-spacing:var(--track-display);
+  line-height:1.02;
+  color:var(--titulo);
+  font-variation-settings:var(--font-var-display);
+  text-wrap:balance;
+}
+h4{font-family:var(--corpo);font-weight:700;color:var(--titulo);line-height:1.25}
+p{text-wrap:pretty}
+strong{color:var(--titulo);font-weight:700}
+
+.mono{
+  font-family:var(--mono);
+  font-size:var(--fs-nota);
+  letter-spacing:var(--track-mono);
+  text-transform:uppercase;
+  font-variant-numeric:tabular-nums;
+  line-height:1.4;
+}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* --------------------------------------------------------------------------
+   LAYOUT
+   -------------------------------------------------------------------------- */
+.bloco{
+  padding:var(--pad-y) var(--pad-x);
+  padding-left:calc(var(--pad-x) + var(--rail));
+  border-top:1px solid var(--linha);
+}
+.bloco:first-of-type{border-top:0}
+.dentro{max-width:var(--pag);margin-inline:auto;width:100%}
+.medida{max-width:var(--medida)}
+/* Seções invertidas e a capa não recolorem componente por componente:
+   elas redefinem os tokens localmente e tudo que está dentro se ajusta sozinho.
+   É por isso que .pagina, .nota, .btn e .faq funcionam nos dois contextos
+   sem uma única regra de sobrescrita — nada se anula. */
+.escuro,.capa{
+  --bg:var(--inv-bg);
+  --superficie:var(--inv-sup);
+  --texto:var(--inv-texto);
+  --titulo:var(--inv-titulo);
+  --sutil:var(--inv-sutil);
+  --linha:var(--inv-linha);
+  --acento-txt:var(--inv-acento);
+  --acento2:var(--inv-acento2);
+  background:var(--bg);
+  color:var(--texto);
+}
+.escuro .linha-fina{background:var(--linha)}
+
+.rotulo{
+  font-family:var(--mono);
+  font-size:var(--fs-nota);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--acento2);
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  margin-bottom:var(--gap-3);
+}
+.rotulo::before{
+  content:"";
+  width:1.75rem;height:2px;flex:none;
+  background:var(--acento-txt);
+}
+.linha-fina{height:1px;background:var(--linha);border:0;margin:var(--gap-6) 0}
+
+/* --------------------------------------------------------------------------
+   BOTÕES  —  alvo mínimo 44px em qualquer direção
+   -------------------------------------------------------------------------- */
+.btn{
+  --btn-desl:0px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.7rem;
+  min-height:3.25rem;
+  padding:.9rem 1.6rem;
+  border:0;
+  border-radius:var(--r-card);
+  background:var(--acento-fundo);
+  color:var(--acento-texto);
+  /* WCAG 1.4.11: o âmbar sozinho não separa do gesso (1,74:1).
+     O anel escuro dá o limite do controle em qualquer fundo. */
+  box-shadow:inset 0 0 0 1px var(--acento-texto);
+  font-family:var(--corpo);
+  font-weight:700;
+  font-size:var(--fs-base);
+  letter-spacing:-.01em;
+  text-decoration:none;
+  cursor:pointer;
+  position:relative;
+  isolation:isolate;
+  transform:translateY(var(--btn-desl));
+  transition:transform var(--t-rapido) var(--ease),filter var(--t-rapido) var(--ease);
+}
+.btn::after{
+  content:"";
+  position:absolute;inset:0;z-index:-1;
+  border-radius:inherit;
+  background:var(--acento-texto);
+  opacity:0;
+  transform:scale(.96);
+  transition:opacity var(--t-medio) var(--ease-out),transform var(--t-medio) var(--ease-out);
+}
+.btn .seta{
+  display:inline-block;
+  transition:transform var(--t-medio) var(--ease-out);
+}
+.btn:hover{--btn-desl:-2px;filter:brightness(1.06)}
+.btn:hover .seta{transform:translateX(4px)}
+.btn:active{--btn-desl:0px;filter:brightness(.96)}
+
+.btn-vazado{
+  background:transparent;
+  color:var(--titulo);
+  box-shadow:inset 0 0 0 1.5px var(--linha-forte);
+  font-weight:500;
+}
+.btn-vazado:hover{filter:none;background:color-mix(in srgb,var(--acento-txt) 14%,transparent)}
+.escuro .btn-vazado{box-shadow:inset 0 0 0 1.5px currentColor}
+
+:where(a,button,summary,[tabindex]):focus-visible{
+  outline:3px solid var(--acento2);
+  outline-offset:3px;
+  border-radius:2px;
+}
+[data-tema="grau"] .btn:focus-visible{outline-color:#101418}
+
+/* --------------------------------------------------------------------------
+   TOPO
+   -------------------------------------------------------------------------- */
+.topo{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--gap-3);
+  padding:1rem var(--pad-x);
+  padding-left:calc(var(--pad-x) + var(--rail));
+  border-bottom:1px solid var(--linha);
+  flex-wrap:wrap;
+}
+.marca{
+  font-family:var(--display);
+  font-weight:var(--peso-display);
+  font-variation-settings:var(--font-var-display);
+  font-size:1.0625rem;
+  letter-spacing:var(--track-display);
+  color:var(--titulo);
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:.55rem;
+  min-height:2.75rem;
+}
+.marca-selo{
+  font-family:var(--mono);
+  font-size:.625rem;
+  letter-spacing:.1em;
+  color:var(--acento-texto);
+  background:var(--acento);
+  box-shadow:inset 0 0 0 1px var(--acento-texto);
+  padding:.2rem .4rem;
+  border-radius:2px;
+}
+/* no celular a nota do topo é escondida: ela quebrava o cabeçalho em duas linhas
+   e empurrava o CTA principal para baixo da dobra. A informação se repete no hero. */
+.topo-nota{display:none;font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.1em;text-transform:uppercase;color:var(--sutil)}
+@media (min-width:30rem){.topo-nota{display:inline}}
+
+/* --------------------------------------------------------------------------
+   SELETOR DE DIREÇÃO — só aparece com JS ativo
+   -------------------------------------------------------------------------- */
+.seletor{display:none}
+.js .seletor{
+  display:flex;
+  position:fixed;
+  z-index:60;
+  left:50%;
+  bottom:1rem;
+  transform:translateX(-50%);
+  gap:2px;
+  padding:3px;
+  background:var(--superficie);
+  border:1px solid var(--linha);
+  border-radius:999px;
+  box-shadow:0 8px 30px rgba(0,0,0,.28);
+  max-width:calc(100vw - 2rem);
+}
+.seletor-btn{
+  min-height:2.75rem;
+  min-width:2.75rem;
+  padding:.55rem .85rem;
+  border:0;
+  border-radius:999px;
+  background:transparent;
+  color:var(--sutil);
+  font-family:var(--mono);
+  font-size:var(--fs-micro);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:color var(--t-rapido) var(--ease),background-color var(--t-rapido) var(--ease);
+}
+.seletor-btn:hover{color:var(--titulo)}
+.seletor-btn[aria-pressed="true"]{background:var(--acento-fundo);color:var(--acento-texto);font-weight:700}
+@media (min-width:64rem){
+  .js .seletor{left:auto;right:1.5rem;bottom:1.5rem;transform:none}
+}
+
+/* --------------------------------------------------------------------------
+   ASSINATURA 1 — RÉGUA DE GRAUS  (direção GRAU)
+   Escala vertical fixa; a agulha âmbar acompanha a rolagem.
+   No celular vira um fio horizontal de progresso no topo.
+   -------------------------------------------------------------------------- */
+.assinatura{display:none}
+[data-tema="grau"] .regua{display:block}
+
+.regua{
+  display:none;
+  position:fixed;
+  top:0;left:0;bottom:0;
+  width:var(--rail-desktop);
+  z-index:40;
+  pointer-events:none;
+  border-right:1px solid var(--linha);
+  background:var(--bg);
+}
+@media (max-width:63.999rem){
+  .regua{
+    top:0;left:0;right:0;bottom:auto;
+    width:auto;height:3px;
+    border-right:0;
+    background:var(--linha);
+    overflow:hidden;
+  }
+  .regua-escala{display:none}
+  .regua-agulha{
+    position:absolute;inset:0;
+    background:var(--acento-txt);
+    transform:scaleX(var(--prog));
+    transform-origin:left center;
+    transition:transform 90ms linear;
+  }
+  .regua-agulha span{display:none}
+}
+@media (min-width:64rem){
+  :root{--rail:6.5rem}
+  [data-tema="efemeride"],[data-tema="eclipse"]{--rail:0rem}
+  .regua-escala{
+    position:absolute;
+    top:12vh;left:0;right:0;
+    height:70vh;
+  }
+  .regua-marca{
+    position:absolute;
+    left:0;right:.6rem;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:.5rem;
+    font-family:var(--mono);
+    font-size:var(--fs-micro);
+    letter-spacing:.06em;
+    color:var(--sutil);
+    transform:translateY(-50%);
+  }
+  .regua-marca::before{
+    content:"";
+    position:absolute;left:0;
+    width:.9rem;height:1px;
+    background:var(--linha);
+  }
+  .regua-marca .glifo{font-family:var(--corpo);font-size:.9rem;color:var(--titulo);line-height:1}
+  .regua-agulha{
+    position:absolute;
+    top:12vh;left:0;right:0;
+    height:2px;
+    background:var(--acento-txt);
+    transform:translateY(calc(var(--prog) * 70vh));
+    transition:transform 90ms linear;
+    will-change:transform;
+  }
+  .regua-agulha span{
+    position:absolute;
+    right:.5rem;top:-1.55rem;
+    font-family:var(--mono);
+    font-size:var(--fs-micro);
+    font-weight:700;
+    color:var(--acento-texto);
+    background:var(--acento);
+    box-shadow:inset 0 0 0 1px var(--acento-texto);
+    padding:.1rem .35rem;
+    border-radius:2px;
+    font-variant-numeric:tabular-nums;
+  }
+  .regua-titulo{
+    position:absolute;
+    bottom:2rem;left:0;right:0;
+    text-align:center;
+    font-family:var(--mono);
+    font-size:var(--fs-micro);
+    letter-spacing:.14em;
+    color:var(--sutil);
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    margin:0 auto;
+    height:9rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   ASSINATURA 2 — FAIXA DE EFEMÉRIDE  (direção EFEMÉRIDE)
+   Tira monoespaçada de dados que rasteja no topo e reaparece como divisor.
+   -------------------------------------------------------------------------- */
+.faixa{display:none;overflow:hidden;border-bottom:1px solid var(--linha);background:var(--superficie)}
+[data-tema="efemeride"] .faixa{display:block}
+[data-tema="efemeride"] .faixa-divisor{display:block;border-top:1px solid var(--linha)}
+.faixa-divisor{display:none}
+.faixa-trilho{
+  display:flex;
+  width:max-content;
+  animation:rastejar 78s linear infinite;
+  will-change:transform;
+}
+.faixa-item{
+  font-family:var(--mono);
+  font-size:var(--fs-micro);
+  letter-spacing:.1em;
+  color:var(--sutil);
+  padding:.55rem 0;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.faixa-item b{color:var(--acento-txt);font-weight:400}
+@keyframes rastejar{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* --------------------------------------------------------------------------
+   ASSINATURA 3 — DISCO DE ECLIPSE  (direção ECLIPSE)
+   Dois discos; um desliza sobre o outro, ocultando parte do título.
+   -------------------------------------------------------------------------- */
+.eclipse{display:none}
+[data-tema="eclipse"] .eclipse{display:block}
+.eclipse{
+  position:absolute;
+  inset:auto 0 0 0;
+  top:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:0;
+}
+.disco{
+  position:absolute;
+  border-radius:50%;
+  width:min(62vw,26rem);
+  aspect-ratio:1;
+}
+.disco-a{
+  top:-14%;right:-16%;
+  background:var(--acento-txt);
+  opacity:.16;
+}
+.disco-b{
+  top:-6%;right:2%;
+  background:var(--acento2);
+  opacity:.14;
+  animation:orbitar 26s var(--ease) infinite alternate;
+  will-change:transform;
+}
+@keyframes orbitar{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-22%,14%,0)}
+}
+
+/* --------------------------------------------------------------------------
+   HERO
+   -------------------------------------------------------------------------- */
+/* No celular o hero é comprimido para o CTA caber acima da dobra em 360×640. */
+.hero{
+  position:relative;
+  padding:clamp(1.25rem,5vw,5rem) var(--pad-x) clamp(3rem,8vw,6rem);
+  padding-left:calc(var(--pad-x) + var(--rail));
+  overflow:hidden;
+}
+.hero .dentro{position:relative;z-index:1}
+.hero-grade{display:grid;gap:var(--gap-6)}
+.hero .rotulo{margin-bottom:.875rem}
+.hero h1{margin-bottom:var(--gap-3);font-size:clamp(1.95rem,1.15rem + 4.4vw,5rem)}
+.hero h1 em{
+  font-style:normal;
+  color:var(--acento2);
+}
+[data-tema="efemeride"] .hero h1 em{font-style:italic;color:var(--acento)}
+.hero-lead{font-size:var(--fs-lead);max-width:32rem;color:var(--texto);margin-bottom:var(--gap-3)}
+@media (min-width:48rem){
+  .hero h1{margin-bottom:var(--gap-4)}
+  .hero-lead{margin-bottom:var(--gap-5)}
+}
+.hero-acoes{display:flex;flex-wrap:wrap;gap:var(--gap-2);align-items:center}
+.hero-nota{
+  margin-top:var(--gap-3);
+  font-family:var(--mono);
+  font-size:var(--fs-nota);
+  letter-spacing:.05em;
+  color:var(--sutil);
+  font-variant-numeric:tabular-nums;
+}
+.hero-nota b{color:var(--acento-txt);font-weight:700}
+
+/* capa do livro — desenhada em CSS, muda com a direção */
+.capa{
+  position:relative;
+  width:min(100%,17rem);
+  aspect-ratio:2/3;
+  border-radius:var(--r-card);
+  padding:1.5rem 1.35rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  box-shadow:0 18px 50px -20px rgba(0,0,0,.55);
+  overflow:hidden;
+  transform:rotate(-1.5deg);
+  transition:transform var(--t-lento) var(--ease-out);
+}
+.capa:hover{transform:rotate(0deg) translateY(-4px)}
+.capa-topo{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.16em;text-transform:uppercase;color:var(--sutil)}
+.capa-titulo{
+  font-family:var(--display);
+  font-weight:var(--peso-display);
+  font-variation-settings:var(--font-var-display);
+  letter-spacing:var(--track-display);
+  font-size:clamp(2rem,9vw,2.9rem);
+  line-height:.92;
+  color:var(--titulo);
+}
+.capa-sub{font-size:var(--fs-peq);color:var(--sutil);margin-top:.5rem;line-height:1.4}
+.capa-escala{display:flex;gap:2px;align-items:flex-end;height:2.5rem}
+.capa-escala i{flex:1;background:currentColor;opacity:.32;height:35%}
+.capa-escala i:nth-child(3n+1){height:100%;opacity:1;background:var(--acento-txt)}
+.capa-escala i:nth-child(6n){height:65%;opacity:.55}
+
+/* --------------------------------------------------------------------------
+   NOTA LATERAL — a camada "para quem já estuda"
+   -------------------------------------------------------------------------- */
+.nota{
+  font-family:var(--mono);
+  font-size:var(--fs-peq);
+  line-height:1.6;
+  letter-spacing:.01em;
+  color:var(--sutil);
+  border-left:2px solid var(--acento-txt);
+  padding:.15rem 0 .15rem .9rem;
+  margin:var(--gap-3) 0;
+  max-width:26rem;
+  text-transform:none;
+}
+.nota b{
+  display:block;
+  color:var(--acento-txt);
+  font-size:var(--fs-micro);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  margin-bottom:.3rem;
+  font-weight:700;
+}
+
+/* --------------------------------------------------------------------------
+   CAPÍTULOS
+   -------------------------------------------------------------------------- */
+.capitulos{display:grid;gap:1px;background:var(--linha);border:1px solid var(--linha);border-radius:var(--r-card);overflow:hidden;margin-top:var(--gap-6)}
+.cap{
+  background:var(--bg);
+  padding:clamp(1.35rem,4vw,2.25rem);
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:.4rem 1.1rem;
+  align-items:start;
+  transition:background-color var(--t-medio) var(--ease);
+}
+.cap:hover{background:var(--superficie)}
+.cap-num{
+  font-family:var(--mono);
+  font-size:var(--fs-nota);
+  font-weight:700;
+  letter-spacing:.06em;
+  color:var(--acento-txt);
+  padding-top:.25rem;
+  font-variant-numeric:tabular-nums;
+  grid-row:span 2;
+  min-width:3.25rem;
+}
+.cap h3{font-size:var(--fs-h3)}
+.cap p{grid-column:2;font-size:var(--fs-peq);color:var(--sutil);line-height:1.6}
+.cap .ganho{
+  grid-column:2;
+  display:inline-flex;
+  align-items:baseline;
+  gap:.5rem;
+  margin-top:.65rem;
+  font-size:var(--fs-peq);
+  color:var(--texto);
+}
+.cap .ganho::before{
+  content:"→";
+  color:var(--acento2);
+  font-family:var(--mono);
+}
+
+/* --------------------------------------------------------------------------
+   AMOSTRA — página do livro diagramada
+   -------------------------------------------------------------------------- */
+/* .pagina é papel nas três direções — é uma folha do livro, não uma superfície da UI.
+   Por isso ela carrega os próprios tokens em vez de herdar os da seção. */
+.pagina{
+  --linha:var(--pagina-linha);
+  --sutil:var(--pagina-sutil);
+  background:var(--pagina-bg);
+  color:var(--pagina-texto);
+  border:1px solid var(--pagina-linha);
+  border-radius:var(--r-card);
+  padding:clamp(1.75rem,6vw,4rem) clamp(1.35rem,5vw,3.5rem);
+  max-width:40rem;
+  margin-top:var(--gap-6);
+  position:relative;
+}
+.pagina-cabeco{
+  display:flex;
+  justify-content:space-between;
+  gap:1rem;
+  padding-bottom:1rem;
+  margin-bottom:var(--gap-4);
+  border-bottom:1px solid var(--linha);
+  font-family:var(--mono);
+  font-size:var(--fs-micro);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--sutil);
+}
+.pagina p{
+  font-family:var(--display);
+  font-weight:400;
+  font-variation-settings:"SOFT" 0,"WONK" 0;
+  font-size:clamp(1.0625rem,.98rem + .35vw,1.25rem);
+  line-height:1.7;
+  color:var(--pagina-texto);
+  margin-bottom:1.15em;
+  hyphens:auto;
+}
+[data-tema="eclipse"] .pagina p{font-family:var(--corpo)}
+.pagina p:last-of-type{margin-bottom:0}
+.pagina p:first-of-type::first-letter{
+  float:left;
+  font-size:3.4em;
+  line-height:.82;
+  padding:.06em .12em 0 0;
+  color:var(--pagina-acento);
+  font-weight:var(--peso-display);
+}
+.pagina-rodape{
+  margin-top:var(--gap-4);
+  padding-top:1rem;
+  border-top:1px solid var(--linha);
+  font-family:var(--mono);
+  font-size:var(--fs-micro);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--sutil);
+}
+
+/* --------------------------------------------------------------------------
+   FILTRO  ·  para quem é / não é
+   -------------------------------------------------------------------------- */
+.filtro{display:grid;gap:var(--gap-4);margin-top:var(--gap-6)}
+.filtro-col{
+  border:var(--borda-card);
+  border-radius:var(--r-card);
+  padding:clamp(1.35rem,4vw,2rem);
+  background:var(--superficie);
+}
+.filtro-col h3{font-size:var(--fs-h3);margin-bottom:var(--gap-3)}
+.filtro-col li{
+  display:grid;
+  grid-template-columns:1.5rem 1fr;
+  gap:.65rem;
+  padding:.7rem 0;
+  border-top:1px solid var(--linha);
+  font-size:var(--fs-peq);
+  line-height:1.55;
+}
+.filtro-col li:first-child{border-top:0;padding-top:0}
+.filtro-col li::before{
+  font-family:var(--mono);
+  font-weight:700;
+  line-height:1.5;
+}
+.filtro-sim li::before{content:"✓";color:var(--acento2)}
+.filtro-nao li::before{content:"×";color:var(--sutil)}
+.filtro-nao{background:transparent}
+
+/* --------------------------------------------------------------------------
+   PROVA SOCIAL
+   -------------------------------------------------------------------------- */
+.depoimentos{display:grid;gap:var(--gap-3);margin-top:var(--gap-6)}
+.dep{
+  border:var(--borda-card);
+  border-radius:var(--r-card);
+  padding:clamp(1.35rem,4vw,1.9rem);
+  background:var(--superficie);
+  display:flex;
+  flex-direction:column;
+  gap:var(--gap-3);
+}
+.dep blockquote{font-size:var(--fs-peq);line-height:1.65;color:var(--texto)}
+.dep blockquote::before{content:"“";color:var(--acento-txt);font-family:var(--display);font-size:2rem;line-height:0;vertical-align:-.35em;margin-right:.15em}
+.dep figcaption{
+  font-family:var(--mono);
+  font-size:var(--fs-micro);
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  color:var(--sutil);
+  margin-top:auto;
+  padding-top:var(--gap-2);
+  border-top:1px solid var(--linha);
+}
+.dep figcaption b{display:block;color:var(--titulo);letter-spacing:.09em;font-weight:700;margin-bottom:.15rem}
+
+/* --------------------------------------------------------------------------
+   AUTORA
+   -------------------------------------------------------------------------- */
+.autora{display:grid;gap:var(--gap-5);margin-top:var(--gap-6)}
+.retrato{
+  width:9.5rem;height:9.5rem;
+  border-radius:50%;
+  background:var(--superficie);
+  border:1px solid var(--linha);
+  display:grid;
+  place-items:center;
+  font-family:var(--display);
+  font-weight:var(--peso-display);
+  font-size:2.4rem;
+  color:var(--acento-txt);
+  flex:none;
+}
+/* TROCAR: substitua .retrato por uma foto real —
+   <img class="retrato" src="autora.jpg" alt="Retrato de Marina Rezende" width="152" height="152"> */
+
+/* --------------------------------------------------------------------------
+   OFERTA
+   -------------------------------------------------------------------------- */
+.oferta-grade{display:grid;gap:var(--gap-6);margin-top:var(--gap-6)}
+.inclui li{
+  display:grid;
+  grid-template-columns:2.75rem 1fr;
+  gap:.5rem 1rem;
+  padding:1rem 0;
+  border-top:1px solid currentColor;
+  border-color:color-mix(in srgb,currentColor 18%,transparent);
+}
+.inclui li:first-child{border-top:0;padding-top:0}
+/* os itens da oferta são h3 (não h4) para não pular nível depois do h2 da seção;
+   o estilo é de subtítulo, não de display */
+.inclui li h3{
+  font-family:var(--corpo);
+  font-weight:700;
+  font-size:var(--fs-h4);
+  letter-spacing:0;
+  line-height:1.25;
+  color:var(--titulo);
+}
+.inclui .idx{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.06em;color:var(--acento-txt);padding-top:.2rem}
+.inclui p{grid-column:2;font-size:var(--fs-peq);color:var(--sutil);margin-top:.15rem}
+
+.preco-caixa{
+  border:1px solid currentColor;
+  border-color:color-mix(in srgb,currentColor 28%,transparent);
+  border-radius:var(--r-card);
+  padding:clamp(1.5rem,5vw,2.25rem);
+  align-self:start;
+  position:relative;
+}
+.preco-de{font-family:var(--mono);font-size:var(--fs-peq);letter-spacing:.06em;text-decoration:line-through;color:var(--sutil)}
+.preco-tag{
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:var(--fs-micro);
+  font-weight:700;
+  letter-spacing:.1em;
+  background:var(--acento-fundo);
+  color:var(--acento-texto);
+  box-shadow:inset 0 0 0 1px var(--acento-texto);
+  padding:.25rem .5rem;
+  border-radius:2px;
+  margin-left:.6rem;
+  vertical-align:.15em;
+}
+.preco{
+  font-family:var(--display);
+  font-weight:var(--peso-display);
+  font-variation-settings:var(--font-var-display);
+  letter-spacing:var(--track-display);
+  font-size:var(--fs-numeral);
+  line-height:1;
+  color:var(--titulo);
+  margin:.35rem 0 .15rem;
+  display:block;
+}
+.preco small{font-size:.32em;letter-spacing:.02em;color:var(--sutil);font-family:var(--mono);display:inline-block;margin-left:.4rem;vertical-align:.9em}
+.preco-alt{font-family:var(--mono);font-size:var(--fs-peq);letter-spacing:.04em;color:var(--sutil);font-variant-numeric:tabular-nums}
+.preco-caixa .btn{width:100%;margin-top:var(--gap-4)}
+.garantia{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:.9rem;
+  align-items:start;
+  margin-top:var(--gap-4);
+  padding-top:var(--gap-3);
+  border-top:1px solid color-mix(in srgb,currentColor 20%,transparent);
+  font-size:var(--fs-peq);
+  line-height:1.55;
+  color:var(--texto);
+}
+.garantia svg{width:1.6rem;height:1.6rem;flex:none;color:var(--acento-txt)}
+
+/* --------------------------------------------------------------------------
+   FAQ  —  <details> nativo: funciona sem JS e é acessível por teclado
+   -------------------------------------------------------------------------- */
+.faq{margin-top:var(--gap-6);border-top:1px solid var(--linha);max-width:46rem}
+.faq details{border-bottom:1px solid var(--linha)}
+.faq summary{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  min-height:3.5rem;
+  padding:1.1rem 0;
+  cursor:pointer;
+  list-style:none;
+  font-family:var(--corpo);
+  font-weight:700;
+  font-size:var(--fs-h4);
+  color:var(--titulo);
+  transition:color var(--t-rapido) var(--ease);
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--acento2)}
+.faq summary::after{
+  content:"+";
+  font-family:var(--mono);
+  font-size:1.35rem;
+  color:var(--acento-txt);
+  flex:none;
+  transition:transform var(--t-medio) var(--ease-out);
+}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding-bottom:1.4rem;font-size:var(--fs-peq);color:var(--sutil);line-height:1.7;max-width:34rem}
+
+/* --------------------------------------------------------------------------
+   FECHAMENTO + RODAPÉ
+   -------------------------------------------------------------------------- */
+.fechamento{text-align:left}
+.fechamento h2{max-width:20ch;margin-bottom:var(--gap-4)}
+.fechamento .hero-nota{margin-top:var(--gap-3)}
+.rodape{
+  padding:var(--gap-6) var(--pad-x);
+  padding-left:calc(var(--pad-x) + var(--rail));
+  border-top:1px solid var(--linha);
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--gap-3) var(--gap-6);
+  justify-content:space-between;
+  align-items:center;
+  font-family:var(--mono);
+  font-size:var(--fs-micro);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--sutil);
+}
+.rodape a{min-height:2.75rem;display:inline-flex;align-items:center;text-decoration-thickness:1px;text-underline-offset:3px}
+.rodape a:hover{color:var(--acento2)}
+/* o seletor flutuante não pode cobrir o rodapé no celular */
+.js .rodape{padding-bottom:6.5rem}
+@media (min-width:64rem){.js .rodape{padding-bottom:var(--gap-6)}}
+
+/* --------------------------------------------------------------------------
+   MOVIMENTO — revelação ao scroll
+   Sem JS a página abre 100% visível; o JS é quem ativa o estado inicial.
+   -------------------------------------------------------------------------- */
+.js .revelar{
+  opacity:0;
+  transform:translate3d(0,18px,0);
+  transition:opacity var(--t-lento) var(--ease-out),transform var(--t-lento) var(--ease-out);
+  transition-delay:calc(var(--d,0) * 70ms);
+  will-change:opacity,transform;
+}
+.js .revelar.visivel{opacity:1;transform:translate3d(0,0,0)}
+
+/* no celular o deslocamento cai pela metade e o stagger some */
+@media (max-width:47.999rem){
+  .js .revelar{transform:translate3d(0,9px,0);transition-delay:0ms}
+}
+
+/* ==========================================================================
+   GLIFOS
+   ========================================================================== */
+.gl{width:1em;height:1em;display:inline-block;vertical-align:-.14em;flex:none;color:inherit}
+.gl-g{width:1.5em;height:1.5em}
+.gl-xg{width:2.4em;height:2.4em}
+
+/* selo circular que embrulha um glifo — o "ícone ilustrado" das seções */
+.selo{
+  width:3rem;height:3rem;
+  display:grid;place-items:center;
+  border-radius:50%;
+  color:var(--acento-txt);
+  box-shadow:inset 0 0 0 1.5px currentColor;
+  flex:none;
+  position:relative;
+}
+.selo::after{
+  content:"";
+  position:absolute;inset:-5px;
+  border-radius:50%;
+  border:1px dashed currentColor;
+  opacity:.32;
+}
+.selo .gl{width:1.5rem;height:1.5rem}
+
+/* ==========================================================================
+   FERRAMENTA — mapa astral
+   ========================================================================== */
+.ferramenta-caixa{
+  margin-top:var(--gap-6);
+  border:var(--borda-card);
+  border-radius:var(--r-card);
+  background:var(--superficie);
+  overflow:hidden;
+}
+.ferramenta-topo{
+  display:flex;
+  align-items:center;
+  gap:var(--gap-3);
+  padding:clamp(1.25rem,4vw,1.75rem);
+  border-bottom:1px solid var(--linha);
+  flex-wrap:wrap;
+}
+.ferramenta-topo h3{font-size:var(--fs-h3);flex:1;min-width:12rem}
+.etiqueta{
+  font-family:var(--mono);
+  font-size:var(--fs-micro);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--acento-texto);
+  background:var(--acento-fundo);
+  box-shadow:inset 0 0 0 1px var(--acento-texto);
+  padding:.3rem .55rem;
+  border-radius:2px;
+  white-space:nowrap;
+}
+.painel{padding:clamp(1.25rem,4vw,2.25rem)}
+
+/* ---- portão de e-mail ---- */
+.portao{display:grid;gap:var(--gap-4);justify-items:start}
+.portao-cabeco{display:flex;gap:var(--gap-3);align-items:flex-start}
+.portao-cabeco p{font-size:var(--fs-peq);color:var(--sutil);max-width:34rem;margin-top:.35rem}
+.portao-cabeco h4{font-size:var(--fs-h4);margin-bottom:.15rem}
+
+.campos{display:grid;gap:var(--gap-3);width:100%;max-width:34rem}
+.campo{display:grid;gap:.4rem}
+.campo label{
+  font-family:var(--mono);
+  font-size:var(--fs-micro);
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  color:var(--sutil);
+}
+.campo input,.campo select{
+  min-height:3rem;
+  padding:.7rem .85rem;
+  background:var(--bg);
+  color:var(--titulo);
+  border:1px solid var(--linha);
+  border-radius:var(--r-card);
+  font-family:var(--corpo);
+  font-size:var(--fs-base);
+  width:100%;
+  transition:border-color var(--t-rapido) var(--ease);
+}
+.campo input:hover,.campo select:hover{border-color:var(--acento-txt)}
+.campo input:focus-visible,.campo select:focus-visible{outline:3px solid var(--acento2);outline-offset:2px;border-color:var(--acento2)}
+.campo .dica{font-size:var(--fs-micro);color:var(--sutil);font-family:var(--mono);letter-spacing:.03em}
+.campo-erro input,.campo-erro select{border-color:var(--acento-txt);border-width:2px}
+.erro-msg{
+  display:flex;align-items:center;gap:.45rem;
+  font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.05em;
+  color:var(--acento-txt);
+}
+.erro-msg:empty{display:none}
+.campos-2{display:grid;gap:var(--gap-3)}
+@media (min-width:34rem){.campos-2{grid-template-columns:1fr 1fr}}
+
+.aviso{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:.75rem;
+  align-items:start;
+  font-size:var(--fs-peq);
+  line-height:1.55;
+  color:var(--sutil);
+  border-left:2px solid var(--acento-txt);
+  padding-left:.9rem;
+  max-width:38rem;
+}
+.aviso .gl{color:var(--acento-txt);width:1.15rem;height:1.15rem;margin-top:.18rem}
+
+.oculto{display:none !important}
+
+/* ---- resultado ---- */
+.resultado{display:grid;gap:var(--gap-6)}
+.resultado-cabeco{display:flex;flex-wrap:wrap;gap:var(--gap-2) var(--gap-4);align-items:baseline;justify-content:space-between}
+.resultado-cabeco h4{font-size:var(--fs-h3);font-family:var(--display);font-weight:var(--peso-display);letter-spacing:var(--track-display)}
+.resultado-cabeco .mono{color:var(--sutil)}
+
+/* trio Sol / Lua / Ascendente */
+.trio{display:grid;gap:var(--gap-3)}
+@media (min-width:34rem){.trio{grid-template-columns:repeat(3,1fr)}}
+.trio-card{
+  border:1px solid var(--linha);
+  border-radius:var(--r-card);
+  padding:clamp(1rem,3.5vw,1.4rem);
+  background:var(--bg);
+  display:grid;
+  gap:.55rem;
+  position:relative;
+  overflow:hidden;
+}
+.trio-card::before{
+  content:"";
+  position:absolute;
+  right:-1.5rem;top:-1.5rem;
+  width:6rem;height:6rem;
+  border-radius:50%;
+  border:1px solid var(--acento-txt);
+  opacity:.16;
+}
+.trio-papel{
+  font-family:var(--mono);font-size:var(--fs-micro);
+  letter-spacing:.13em;text-transform:uppercase;color:var(--sutil);
+  display:flex;align-items:center;gap:.5rem;
+}
+.trio-papel .gl{color:var(--acento-txt);width:1.1rem;height:1.1rem}
+.trio-signo{
+  display:flex;align-items:center;gap:.6rem;
+  font-family:var(--display);
+  font-weight:var(--peso-display);
+  font-variation-settings:var(--font-var-display);
+  letter-spacing:var(--track-display);
+  font-size:clamp(1.35rem,1.1rem + 1.1vw,1.9rem);
+  line-height:1;
+  color:var(--titulo);
+}
+.trio-signo .gl{width:1.5rem;height:1.5rem;color:var(--acento-txt)}
+.trio-grau{
+  font-family:var(--mono);font-size:var(--fs-peq);
+  letter-spacing:.05em;color:var(--acento-txt);font-variant-numeric:tabular-nums;
+}
+.trio-card p{font-size:var(--fs-peq);color:var(--sutil);line-height:1.55}
+
+/* ---- a roda ---- */
+.roda-caixa{
+  display:grid;
+  gap:var(--gap-4);
+  justify-items:center;
+}
+.roda{
+  width:100%;
+  max-width:34rem;
+  height:auto;
+  display:block;
+  overflow:visible;
+}
+.roda-fundo{fill:var(--bg)}
+.roda-anel{fill:none;stroke:var(--linha);stroke-width:1}
+.roda-anel-forte{fill:none;stroke:var(--titulo);stroke-width:1.2;opacity:.5}
+.roda-setor{stroke:var(--linha);stroke-width:.8}
+.roda-tick{stroke:var(--sutil);stroke-width:.6;opacity:.55}
+.roda-tick-10{stroke:var(--sutil);stroke-width:.9;opacity:.85}
+.roda-casa{stroke:var(--linha);stroke-width:.8;stroke-dasharray:3 3}
+.roda-eixo{stroke:var(--acento-txt);stroke-width:1.6}
+.roda-num{fill:var(--sutil);font-family:var(--mono);font-size:7px;letter-spacing:.04em}
+.roda-signo{color:var(--titulo);opacity:.9}
+.roda-planeta{color:var(--titulo)}
+.roda-planeta-grau{fill:var(--sutil);font-family:var(--mono);font-size:6.2px}
+.roda-marcador{stroke:var(--titulo);stroke-width:.9;opacity:.55}
+.asp-harm{stroke:var(--acento2);stroke-width:.7;opacity:.55;fill:none}
+.asp-tens{stroke:var(--acento-txt);stroke-width:.7;opacity:.55;fill:none}
+.asp-conj{stroke:var(--sutil);stroke-width:.7;opacity:.45;stroke-dasharray:2 2;fill:none}
+.roda-rotulo-eixo{fill:var(--acento-txt);font-family:var(--mono);font-size:7px;font-weight:700;letter-spacing:.06em}
+
+.legenda{
+  display:flex;flex-wrap:wrap;gap:.5rem 1.1rem;justify-content:center;
+  font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.06em;
+  text-transform:uppercase;color:var(--sutil);
+}
+.legenda span{display:inline-flex;align-items:center;gap:.4rem}
+.legenda i{width:1.1rem;height:2px;display:inline-block}
+.legenda .l-harm{background:var(--acento2)}
+.legenda .l-tens{background:var(--acento-txt)}
+.legenda .l-conj{background:var(--sutil);opacity:.6}
+
+/* ---- tabela de posições ---- */
+.tabela-rolar{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--linha);border-radius:var(--r-card)}
+.tabela{width:100%;border-collapse:collapse;min-width:26rem}
+.tabela caption{
+  text-align:left;padding:.9rem 1rem;
+  font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.13em;
+  text-transform:uppercase;color:var(--sutil);border-bottom:1px solid var(--linha);
+}
+.tabela th,.tabela td{padding:.62rem 1rem;text-align:left;border-bottom:1px solid var(--linha);font-size:var(--fs-peq)}
+.tabela tbody tr:last-child td{border-bottom:0}
+.tabela th{
+  font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--sutil);font-weight:400;
+}
+.tabela td{color:var(--texto);font-variant-numeric:tabular-nums}
+.tabela .cel-astro{display:flex;align-items:center;gap:.55rem;color:var(--titulo);font-weight:700}
+.tabela .cel-astro .gl{width:1.1rem;height:1.1rem;color:var(--acento-txt)}
+.tabela .cel-signo{display:flex;align-items:center;gap:.45rem}
+.tabela .cel-signo .gl{width:1rem;height:1rem;color:var(--acento2)}
+.tabela .retro{color:var(--acento-txt);font-family:var(--mono);font-size:var(--fs-micro)}
+.tabela tbody tr{transition:background-color var(--t-rapido) var(--ease)}
+.tabela tbody tr:hover{background:var(--superficie)}
+
+/* ---- leitura do grau: o gancho do livro ---- */
+.grau-destaque{
+  border:1px solid var(--acento-txt);
+  border-radius:var(--r-card);
+  padding:clamp(1.25rem,4vw,2rem);
+  display:grid;
+  gap:var(--gap-3);
+  position:relative;
+  overflow:hidden;
+}
+.grau-fita{
+  display:flex;height:1.75rem;gap:1px;align-items:stretch;
+  border-radius:2px;overflow:hidden;
+}
+.grau-fita i{flex:1;background:var(--linha)}
+.grau-fita i.dentro{background:var(--acento-txt);opacity:.35}
+.grau-fita i.aqui{background:var(--acento-fundo);opacity:1;box-shadow:inset 0 0 0 1px var(--acento-texto)}
+.grau-numero{
+  font-family:var(--display);
+  font-weight:var(--peso-display);
+  font-variation-settings:var(--font-var-display);
+  letter-spacing:var(--track-display);
+  font-size:var(--fs-numeral);
+  line-height:1;
+  color:var(--titulo);
+}
+.grau-destaque p{font-size:var(--fs-peq);color:var(--sutil);line-height:1.6;max-width:36rem}
+
+/* ---- lista de aspectos ---- */
+.aspectos{display:grid;gap:.5rem}
+.asp-item{
+  display:grid;
+  grid-template-columns:auto auto 1fr auto;
+  align-items:center;
+  gap:.6rem;
+  padding:.6rem .8rem;
+  border:1px solid var(--linha);
+  border-radius:var(--r-card);
+  font-size:var(--fs-peq);
+  background:var(--bg);
+}
+.asp-item .gl{width:1.05rem;height:1.05rem;color:var(--titulo)}
+.asp-nome{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.09em;text-transform:uppercase}
+.asp-orbe{font-family:var(--mono);font-size:var(--fs-micro);color:var(--sutil);font-variant-numeric:tabular-nums}
+.asp-item.harm .asp-nome{color:var(--acento2)}
+.asp-item.tens .asp-nome{color:var(--acento-txt)}
+.asp-item.conj .asp-nome{color:var(--sutil)}
+
+.acoes-resultado{display:flex;flex-wrap:wrap;gap:var(--gap-2)}
+
+/* carregando */
+.carregando{display:flex;align-items:center;gap:.75rem;font-family:var(--mono);font-size:var(--fs-peq);color:var(--sutil)}
+.carregando .gl{animation:girar 1.4s linear infinite;color:var(--acento-txt)}
+@keyframes girar{to{transform:rotate(360deg)}}
+
+/* --------------------------------------------------------------------------
+   BREAKPOINTS — mobile-first, subindo com min-width
+   -------------------------------------------------------------------------- */
+@media (min-width:30rem){
+  .depoimentos{grid-template-columns:repeat(2,1fr)}
+}
+@media (min-width:48rem){          /* 768px — tablet */
+  .hero-grade{grid-template-columns:1.35fr .65fr;align-items:center;gap:var(--gap-8)}
+  .capa{width:min(100%,19rem);margin-left:auto}
+  .capitulos{grid-template-columns:repeat(2,1fr)}
+  .filtro{grid-template-columns:repeat(2,1fr)}
+  .autora{grid-template-columns:auto 1fr;align-items:start;gap:var(--gap-8)}
+  .oferta-grade{grid-template-columns:1fr .85fr;gap:var(--gap-10)}
+  .depoimentos{grid-template-columns:repeat(2,1fr)}
+  .nota{margin-left:0}
+}
+@media (min-width:64rem){          /* 1024px — desktop, régua entra */
+  .depoimentos{grid-template-columns:repeat(4,1fr)}
+  .capitulos{grid-template-columns:repeat(3,1fr)}
+  .fechamento h2{font-size:clamp(2.5rem,4vw,4.25rem)}
+}
+@media (min-width:90rem){          /* 1440px — margens respiram */
+  :root{--pad-x:5rem}
+}
+
+/* --------------------------------------------------------------------------
+   MOVIMENTO REDUZIDO — desliga tudo. Obrigatório.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+  .js .revelar{opacity:1;transform:none}
+  .faixa-trilho{animation:none}
+  .disco-b{animation:none}
+  .capa{transform:none}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ==========================================================================
+     CONJUNTO DE GLIFOS — desenhado à mão em path, grade 24×24, traço 1.7.
+     Nenhuma fonte de ícone, nenhuma imagem externa: tudo herda currentColor
+     e reage ao tema. Use com <svg class="gl"><use href="#g-leo"/></svg>
+     ========================================================================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <g id="_st" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></g>
+
+  <!-- ---- signos ---- -->
+  <symbol id="g-aries" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="M12 9c0-4-2.2-6-4.5-6S3.5 5 3.5 8"/><path d="M12 9c0-4 2.2-6 4.5-6S20.5 5 20.5 8"/></g></symbol>
+  <symbol id="g-touro" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="15.6" r="5.4"/><path d="M5.4 3.8c0 3.6 2.9 6.6 6.6 6.6s6.6-3 6.6-6.6"/></g></symbol>
+  <symbol id="g-gemeos" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8.2 5.4v13.2M15.8 5.4v13.2"/><path d="M4.6 4.2c4.8 2.1 10 2.1 14.8 0M4.6 19.8c4.8-2.1 10-2.1 14.8 0"/></g></symbol>
+  <symbol id="g-cancer" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 10.2c2.8-3.2 6.8-4.2 10-3.4"/><path d="M21.2 13.8c-2.8 3.2-6.8 4.2-10 3.4"/><circle cx="6.6" cy="12.4" r="2.5"/><circle cx="17.4" cy="11.6" r="2.5"/></g></symbol>
+  <symbol id="g-leao" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.4" cy="16.4" r="3.9"/><path d="M11 14.2c-1.6-3.1 0-6.8 2.5-8.6 2.7-1.9 5.8.4 4.8 3.5-.8 2.5-2.7 3.6-2.7 6.2 0 2.1 1.5 3.4 3.1 3.4"/></g></symbol>
+  <symbol id="g-virgem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 8.6c0-2.6 3.4-2.6 3.4 0v9.8M7 9c0-2.6 3.4-2.6 3.4 0v9.4M10.4 9c0-2.6 3.4-2.6 3.4 0v5.8c0 4 2.9 5.2 5.4 4.4"/><path d="M13.6 14.4c0 3.4 3.2 6 6.6 6.2"/></g></symbol>
+  <symbol id="g-libra" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.4 20.2h17.2"/><path d="M3.4 15.4h5.4M15.2 15.4h5.4"/><path d="M8.8 15.4a4.6 4.6 0 1 1 6.4 0"/></g></symbol>
+  <symbol id="g-escorpiao" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 8.6c0-2.6 3.4-2.6 3.4 0v9.8M6.2 9c0-2.6 3.4-2.6 3.4 0v9.4M9.6 9c0-2.6 3.4-2.6 3.4 0v7.4c0 3.1 3 4.2 4.8 2.4"/><path d="M17.2 21.2l3.8-3.6-3.8-3"/></g></symbol>
+  <symbol id="g-sagitario" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.4 19.6L19.6 4.4"/><path d="M12.8 4.4h6.8v6.8"/><path d="M7.6 12.2l4.2 4.2"/></g></symbol>
+  <symbol id="g-capricornio" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.4 6.6c0-2.6 3.4-2.6 3.4 0v11.8"/><path d="M6.8 8.4c1.2-3.2 4.8-2.6 5.4 1.2.6 3.8.4 6.8-.8 8.8"/><circle cx="15.8" cy="16.8" r="3.6"/></g></symbol>
+  <symbol id="g-aquario" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.6 10.4l3.6-3.2 3.6 3.2 3.6-3.2 3.6 3.2 3.4-3"/><path d="M2.6 17.6l3.6-3.2 3.6 3.2 3.6-3.2 3.6 3.2 3.4-3"/></g></symbol>
+  <symbol id="g-peixes" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.4 3.2c-3.2 5.8-3.2 11.8 0 17.6M17.6 3.2c3.2 5.8 3.2 11.8 0 17.6"/><path d="M3.6 12h16.8"/></g></symbol>
+
+  <!-- ---- planetas ---- -->
+  <symbol id="g-sol" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="7.4"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></g></symbol>
+  <symbol id="g-lua" viewBox="0 0 24 24"><path fill="currentColor" d="M15.4 2.8a9.6 9.6 0 0 0 0 18.4 9.9 9.9 0 1 1 0-18.4Z"/></symbol>
+  <symbol id="g-mercurio" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="10.6" r="3.9"/><path d="M12 14.5v6.6M8.7 18.3h6.6"/><path d="M8.2 2.6a5.2 5.2 0 0 0 7.6 0"/></g></symbol>
+  <symbol id="g-venus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="8.4" r="4.6"/><path d="M12 13v8.2M8.7 17.6h6.6"/></g></symbol>
+  <symbol id="g-marte" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.8" cy="14.2" r="5.2"/><path d="M13.6 10.4L20.4 3.6"/><path d="M15.2 3.6h5.2v5.2"/></g></symbol>
+  <symbol id="g-jupiter" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M5.2 7.4c1.6-3.4 6.2-2.8 5.8 1.2-.5 4.8-3.9 8.9-6.2 11.8"/><path d="M4.2 20.4h13.2"/><path d="M14.2 4.6v15.8"/></g></symbol>
+  <symbol id="g-saturno" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4.6 6.8h6.2"/><path d="M8 3.6v10.6c0 3.4 2.7 4.9 4.9 3.7"/><path d="M12.9 17.9c1.7-1.1 2.7-3.3 2.2-5.2s-2.6-2.6-4-1.4"/></g></symbol>
+  <symbol id="g-urano" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="17.8" r="3.1"/><path d="M12 14.7V3.4M7.6 6v5.6M16.4 6v5.6M7.6 8.8h8.8"/></g></symbol>
+  <symbol id="g-netuno" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3.4v17.2M8.2 20.6h7.6"/><path d="M4.8 6.6v5.2c0 4 3.2 7.2 7.2 7.2s7.2-3.2 7.2-7.2V6.6"/></g></symbol>
+  <symbol id="g-plutao" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M5.8 20.6V9.4h3.8a3.1 3.1 0 0 1 0 6.2H5.8"/><path d="M14.6 9.4v11.2M11.4 14.4h6.4"/><circle cx="14.6" cy="5" r="2.6"/></g></symbol>
+  <symbol id="g-nodo" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M7.4 18.4c0-3.8-3-5.2-3-8.6a5 5 0 0 1 7.6-4 5 5 0 0 1 7.6 4c0 3.4-3 4.8-3 8.6"/><circle cx="7.4" cy="20.4" r="1.6"/><circle cx="16.6" cy="20.4" r="1.6"/></g></symbol>
+
+  <!-- ---- utilitários de interface ---- -->
+  <symbol id="g-cadeado" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/><circle cx="12" cy="15.6" r="1.5" fill="currentColor" stroke="none"/></g></symbol>
+  <symbol id="g-envelope" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/></g></symbol>
+  <symbol id="g-escudo" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 4 6v6c0 5 3.4 8.6 8 9.5 4.6-.9 8-4.5 8-9.5V6l-8-3.5Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></g></symbol>
+  <symbol id="g-compasso" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5.5-5.5 2 2-5.5 5.5-2Z"/></g></symbol>
+  <symbol id="g-livro" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 4.5h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5h-6.5Z"/><path d="M20.5 4.5h-6a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5h6.5Z"/></g></symbol>
+  <symbol id="g-relogio" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6.8V12l3.6 2.4"/></g></symbol>
+  <symbol id="g-download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v11M7.5 10.5 12 15l4.5-4.5"/><path d="M4 17.5v1.5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1.5"/></g></symbol>
+  <symbol id="g-alerta" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 21.5 20H2.5L12 3.5Z"/><path d="M12 10v4"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></g></symbol>
+</defs></svg>
+
+<!-- ===== ASSINATURA A · faixa de efeméride (direção EFEMÉRIDE) ============ -->
+<div class="faixa" aria-hidden="true">
+  <div class="faixa-trilho">
+    <div class="faixa-item">&nbsp;&nbsp;14 AGO&nbsp; <b>☉</b>21°♌&nbsp; <b>☽</b>03°♓&nbsp; <b>☿</b>09°♌&nbsp; <b>♀</b>27°♋&nbsp; <b>♂</b>14°♍&nbsp; <b>♃</b>02°♊&nbsp;·&nbsp;&nbsp;15 AGO&nbsp; <b>☉</b>22°♌&nbsp; <b>☽</b>16°♓&nbsp; <b>☿</b>09°♌&nbsp; <b>♀</b>28°♋&nbsp; <b>♂</b>15°♍&nbsp; <b>♃</b>02°♊&nbsp;·&nbsp;&nbsp;16 AGO&nbsp; <b>☉</b>23°♌&nbsp; <b>☽</b>29°♓&nbsp; <b>☿</b>08°♌&nbsp; <b>♀</b>29°♋&nbsp; <b>♂</b>15°♍&nbsp; <b>♃</b>03°♊&nbsp;·&nbsp;&nbsp;17 AGO&nbsp; <b>☉</b>24°♌&nbsp; <b>☽</b>12°♈&nbsp; <b>☿</b>08°♌&nbsp; <b>♀</b>00°♌&nbsp; <b>♂</b>16°♍&nbsp; <b>♃</b>03°♊&nbsp;·&nbsp;</div>
+    <div class="faixa-item">&nbsp;&nbsp;14 AGO&nbsp; <b>☉</b>21°♌&nbsp; <b>☽</b>03°♓&nbsp; <b>☿</b>09°♌&nbsp; <b>♀</b>27°♋&nbsp; <b>♂</b>14°♍&nbsp; <b>♃</b>02°♊&nbsp;·&nbsp;&nbsp;15 AGO&nbsp; <b>☉</b>22°♌&nbsp; <b>☽</b>16°♓&nbsp; <b>☿</b>09°♌&nbsp; <b>♀</b>28°♋&nbsp; <b>♂</b>15°♍&nbsp; <b>♃</b>02°♊&nbsp;·&nbsp;&nbsp;16 AGO&nbsp; <b>☉</b>23°♌&nbsp; <b>☽</b>29°♓&nbsp; <b>☿</b>08°♌&nbsp; <b>♀</b>29°♋&nbsp; <b>♂</b>15°♍&nbsp; <b>♃</b>03°♊&nbsp;·&nbsp;&nbsp;17 AGO&nbsp; <b>☉</b>24°♌&nbsp; <b>☽</b>12°♈&nbsp; <b>☿</b>08°♌&nbsp; <b>♀</b>00°♌&nbsp; <b>♂</b>16°♍&nbsp; <b>♃</b>03°♊&nbsp;·&nbsp;</div>
+  </div>
+</div>
+
+<!-- ===== ASSINATURA B · régua de graus (direção GRAU) ===================== -->
+<div class="regua" aria-hidden="true">
+  <div class="regua-escala">
+    <div class="regua-marca" style="top:0%"><span class="glifo">♈</span>0°</div>
+    <div class="regua-marca" style="top:8.33%"><span class="glifo">♉</span>30°</div>
+    <div class="regua-marca" style="top:16.66%"><span class="glifo">♊</span>60°</div>
+    <div class="regua-marca" style="top:25%"><span class="glifo">♋</span>90°</div>
+    <div class="regua-marca" style="top:33.33%"><span class="glifo">♌</span>120°</div>
+    <div class="regua-marca" style="top:41.66%"><span class="glifo">♍</span>150°</div>
+    <div class="regua-marca" style="top:50%"><span class="glifo">♎</span>180°</div>
+    <div class="regua-marca" style="top:58.33%"><span class="glifo">♏</span>210°</div>
+    <div class="regua-marca" style="top:66.66%"><span class="glifo">♐</span>240°</div>
+    <div class="regua-marca" style="top:75%"><span class="glifo">♑</span>270°</div>
+    <div class="regua-marca" style="top:83.33%"><span class="glifo">♒</span>300°</div>
+    <div class="regua-marca" style="top:91.66%"><span class="glifo">♓</span>330°</div>
+    <div class="regua-marca" style="top:100%"><span class="glifo">♈</span>360°</div>
+  </div>
+  <div class="regua-agulha"><span id="grauAtual">0°</span></div>
+  <div class="regua-titulo">a eclíptica · 360°</div>
+</div>
+
+<header class="topo">
+  <a class="marca" href="#topo">Trinta&nbsp;Graus <span class="marca-selo">EBOOK</span></a>
+  <span class="topo-nota">214 páginas · PDF + EPUB</span>
+</header>
+
+<main id="topo">
+
+  <!-- ===== HERO ========================================================== -->
+  <section class="hero">
+    <div class="eclipse" aria-hidden="true">
+      <div class="disco disco-a"></div>
+      <div class="disco disco-b"></div>
+    </div>
+
+    <div class="dentro hero-grade">
+      <div>
+        <p class="rotulo revelar">0° ÁRIES · o começo da eclíptica</p>
+
+        <h1 class="revelar" style="--d:1">Trinta graus é o tamanho de um signo. Ninguém te contou <em>o que cabe lá dentro.</em></h1>
+
+        <p class="hero-lead revelar" style="--d:2">Um ebook de 214 páginas que trata os doze signos como eles são: doze faixas de trinta graus, cada uma com uma lógica própria. Sem previsão, sem mapa personalizado, sem promessa de transformação.</p>
+
+        <div class="hero-acoes revelar" style="--d:3">
+          <!-- TROCAR: cole aqui o Payment Link do Stripe (https://buy.stripe.com/...) -->
+          <a class="btn" href="#oferta" data-checkout>Quero ler — R$&nbsp;45,60 no Pix <span class="seta" aria-hidden="true">→</span></a>
+          <a class="btn btn-vazado" href="#amostra">Ler um trecho antes</a>
+        </div>
+
+        <p class="hero-nota revelar" style="--d:4">de R$&nbsp;80,00 · <b>43% à vista no Pix</b> · entrega imediata no e-mail · 7 dias de garantia</p>
+      </div>
+
+      <div class="revelar" style="--d:2">
+        <div class="capa" role="img" aria-label="Capa do ebook Trinta Graus, com o título em destaque e uma escala de graus na base.">
+          <div class="capa-topo">12 × 30° = 360°</div>
+          <div>
+            <div class="capa-titulo">Trinta<br>Graus</div>
+            <div class="capa-sub">o que cabe em cada um dos doze signos</div>
+          </div>
+          <div class="capa-escala" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="faixa-divisor faixa" aria-hidden="true"><div class="faixa-trilho"><div class="faixa-item">&nbsp;&nbsp;CAP. 1 — TRINTA GRAUS&nbsp;·&nbsp;p.12&nbsp;&nbsp;·&nbsp;&nbsp;CAP. 2 — OS QUATRO ELEMENTOS&nbsp;·&nbsp;p.34&nbsp;&nbsp;·&nbsp;&nbsp;CAP. 3 — CARDINAL, FIXO, MUTÁVEL&nbsp;·&nbsp;p.51&nbsp;&nbsp;·&nbsp;&nbsp;CAP. 4 — OS DOZE, UM A UM&nbsp;·&nbsp;p.73&nbsp;&nbsp;·&nbsp;&nbsp;</div><div class="faixa-item">&nbsp;&nbsp;CAP. 1 — TRINTA GRAUS&nbsp;·&nbsp;p.12&nbsp;&nbsp;·&nbsp;&nbsp;CAP. 2 — OS QUATRO ELEMENTOS&nbsp;·&nbsp;p.34&nbsp;&nbsp;·&nbsp;&nbsp;CAP. 3 — CARDINAL, FIXO, MUTÁVEL&nbsp;·&nbsp;p.51&nbsp;&nbsp;·&nbsp;&nbsp;CAP. 4 — OS DOZE, UM A UM&nbsp;·&nbsp;p.73&nbsp;&nbsp;·&nbsp;&nbsp;</div></div></div>
+
+  <!-- ===== O PROBLEMA ==================================================== -->
+  <section class="bloco" id="problema" data-grau="30">
+    <div class="dentro">
+      <p class="rotulo revelar">30° · o problema</p>
+      <h2 class="revelar medida" style="--d:1">Horóscopo de revista tem doze respostas para oito bilhões de pessoas.</h2>
+
+      <div class="medida" style="margin-top:var(--gap-5)">
+        <p class="revelar" style="--d:2">Você já percebeu isso sozinho. Lê “Câncer” numa segunda-feira e serve. Lê “Capricórnio” na terça e também serve. O problema não é a astrologia — é a compressão. Doze parágrafos genéricos escritos às pressas não cabem dentro de uma pessoa.</p>
+
+        <p class="revelar" style="--d:3;margin-top:1.1em">Um signo não é um tipo de personalidade. É uma faixa de trinta graus da eclíptica, com começo, meio e fim. E o que acontece nos três primeiros graus de Áries quase não conversa com o que acontece nos três últimos.</p>
+
+        <p class="revelar" style="--d:4;margin-top:1.1em"><strong>Este livro parte daí.</strong> Ele não te diz quem você é. Ele te mostra como o sistema foi construído, para você mesmo enxergar onde o rótulo cabe e onde ele arrebenta.</p>
+
+        <aside class="nota revelar" style="--d:5">
+          <b>para quem já estuda</b>
+          Decanatos, divisão caldaica e a diferença entre zodíaco trópico e sideral aparecem no cap. 3 — com a fonte de cada tradição citada, sem esoterismo forçado e sem fingir que existe consenso onde não existe.
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== O QUE TEM DENTRO ============================================== -->
+  <section class="bloco" id="dentro" data-grau="90">
+    <div class="dentro">
+      <p class="rotulo revelar">90° · o que tem dentro</p>
+      <h2 class="revelar medida" style="--d:1">Sete capítulos. Cada um resolve uma coisa.</h2>
+
+      <div class="capitulos">
+        <article class="cap revelar"><span class="cap-num">01 · p.12</span>
+          <h3>Trinta graus</h3>
+          <p>Por que um signo tem exatamente esse tamanho, e o que muda do grau 1 para o grau 30.</p>
+          <span class="ganho">Você para de ler seu signo como um bloco único.</span>
+        </article>
+
+        <article class="cap revelar" style="--d:1"><span class="cap-num">02 · p.34</span>
+          <h3>Os quatro elementos, sem clichê</h3>
+          <p>Fogo, terra, ar e água como quatro estratégias de lidar com o mundo — não quatro tipos de gente.</p>
+          <span class="ganho">Entende por que dois signos do mesmo elemento agem de formas opostas.</span>
+        </article>
+
+        <article class="cap revelar" style="--d:2"><span class="cap-num">03 · p.51</span>
+          <h3>Cardinal, fixo, mutável</h3>
+          <p>A modalidade é metade da resposta, e é a metade que quase nenhum livro popular explica direito.</p>
+          <span class="ganho">Descobre por que Áries e Capricórnio brigam de um jeito parecido.</span>
+        </article>
+
+        <article class="cap revelar" style="--d:3"><span class="cap-num">04 · p.73</span>
+          <h3>Os doze, um a um</h3>
+          <p>Um capítulo por signo, do grau 0 ao 30: o que a tradição afirma, o que a observação contradiz, e onde os dois se encontram.</p>
+          <span class="ganho">O seu signo finalmente com nuance — e o da sua mãe também.</span>
+        </article>
+
+        <article class="cap revelar" style="--d:4"><span class="cap-num">05 · p.158</span>
+          <h3>O regente</h3>
+          <p>Quem manda em cada faixa de trinta graus e o que essa regência muda na prática, sem tabela decorada.</p>
+          <span class="ganho">Entende o “porquê” por trás das características, não só a lista.</span>
+        </article>
+
+        <article class="cap revelar" style="--d:5"><span class="cap-num">06 · p.181</span>
+          <h3>Quando o signo não explica</h3>
+          <p>Os limites honestos da ferramenta: o que a astrologia não prevê, não diagnostica e não resolve.</p>
+          <span class="ganho">Você aprende a não forçar a astrologia onde ela não serve.</span>
+        </article>
+
+        <article class="cap revelar" style="--d:6"><span class="cap-num">07 · p.199</span>
+          <h3>Como ler alguém sem reduzir</h3>
+          <p>Um método de leitura em cinco perguntas, aplicável numa conversa de dez minutos.</p>
+          <span class="ganho">Você sai do rótulo e chega numa conversa de verdade.</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== AMOSTRA ======================================================= -->
+  <section class="bloco escuro" id="amostra" data-grau="150">
+    <div class="dentro">
+      <p class="rotulo revelar">150° · um trecho de verdade</p>
+      <h2 class="revelar medida" style="--d:1">Página 96, capítulo 4.</h2>
+      <p class="revelar medida" style="--d:2;margin-top:var(--gap-3)">Sem corte de marketing. É exatamente como está no arquivo que você recebe.</p>
+
+      <article class="pagina revelar" style="--d:3">
+        <div class="pagina-cabeco"><span>Cap. 4 · Os doze, um a um</span><span>♈ 0°–30°</span></div>
+
+        <p>Existe uma diferença que quase nenhum livro popular menciona: o grau zero de Áries não é o começo de um signo. É o começo de tudo. É o ponto onde a eclíptica cruza o equador celeste, o zero absoluto do sistema inteiro. Um planeta ali não está apenas “em Áries”. Está no começo.</p>
+
+        <p>Isso muda como se lê a coisa. Alguém com o Sol a 0°17' de Áries carrega uma qualidade que não é agressividade nem coragem — os dois adjetivos que sempre aparecem. É outra coisa, mais estranha e mais específica: a incapacidade de herdar. Tudo precisa ser feito pela primeira vez, inclusive aquilo que outra pessoa já fez na semana passada, do lado, na frente dela.</p>
+
+        <p>Agora vá até 28° de Áries. O território é o mesmo, o elemento é o mesmo, o regente é o mesmo. Mas dali já se enxerga Touro na esquina. A pressa começa a querer resultado, não só movimento. É uma pressa que compra terreno.</p>
+
+        <p>Trinta graus. Dois lugares completamente diferentes. E a revista te deu um parágrafo só.</p>
+
+        <div class="pagina-rodape">Trinta Graus · p. 96</div>
+      </article>
+
+      <aside class="nota revelar" style="--d:4">
+        <b>para quem já estuda</b>
+        O trecho usa o ponto vernal como referência fixa. A discussão sobre precessão dos equinócios e a defesa metodológica do trópico está no cap. 3, p. 58 — inclusive o contra-argumento siderealista.
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===== FILTRO ======================================================== -->
+  <section class="bloco" id="filtro" data-grau="210">
+    <div class="dentro">
+      <p class="rotulo revelar">210° · o filtro honesto</p>
+      <h2 class="revelar medida" style="--d:1">Este livro não é para todo mundo, e tudo bem.</h2>
+
+      <div class="filtro">
+        <div class="filtro-col filtro-sim revelar" style="--d:2">
+          <h3>É para você se…</h3>
+          <ul>
+            <li>Você lê a descrição do seu signo e sente que ela serve para metade das pessoas que conhece.</li>
+            <li>Você quer entender o mecanismo, não receber uma previsão.</li>
+            <li>Você já tentou ler astrologia e travou no vocabulário na terceira página.</li>
+            <li>Você gosta de um texto que admite o que não sabe.</li>
+            <li>Você já estuda e sente falta de um livro que trate grau, modalidade e regência com rigor sem virar manual técnico.</li>
+          </ul>
+        </div>
+
+        <div class="filtro-col filtro-nao revelar" style="--d:3">
+          <h3>Não é para você se…</h3>
+          <ul>
+            <li>Você quer saber se vai dar certo com alguém em novembro. Este livro não faz previsão.</li>
+            <li>Você procura um mapa astral personalizado. Não é isso — é um livro, igual para todo mundo.</li>
+            <li>Você quer confirmação de que o seu signo é o melhor. O capítulo 6 vai te decepcionar de propósito.</li>
+            <li>Você não tem paciência para 214 páginas de texto corrido.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROVA SOCIAL ================================================== -->
+  <!-- ⚠ SUBSTITUIR ANTES DE PUBLICAR: os quatro depoimentos abaixo e o número
+       de leitores são PLACEHOLDERS ESTRUTURAIS, escritos para mostrar o formato.
+       Não são pessoas reais. Troque por depoimentos que você tenha de fato. -->
+  <section class="bloco" id="prova" data-grau="240">
+    <div class="dentro">
+      <p class="rotulo revelar">240° · quem já leu</p>
+      <h2 class="revelar medida" style="--d:1">O que os primeiros leitores disseram.</h2>
+
+      <div class="depoimentos">
+        <figure class="dep revelar" style="--d:2">
+          <blockquote>Eu tinha desistido de astrologia porque tudo que eu achava era genérico. Esse foi o primeiro que me explicou <em>por quê</em>, e não só <em>o quê</em>.</blockquote>
+          <figcaption><b>Placeholder · nome</b>cidade · uf</figcaption>
+        </figure>
+        <figure class="dep revelar" style="--d:3">
+          <blockquote>O capítulo 6 é o motivo de eu recomendar o livro. É raro alguém escrever sobre astrologia e dizer com todas as letras onde ela não serve.</blockquote>
+          <figcaption><b>Placeholder · nome</b>cidade · uf</figcaption>
+        </figure>
+        <figure class="dep revelar" style="--d:4">
+          <blockquote>Estudo mapa astral há quatro anos e ainda assim aprendi coisa nova na parte de modalidade. Não é um livro de introdução disfarçado.</blockquote>
+          <figcaption><b>Placeholder · nome</b>cidade · uf</figcaption>
+        </figure>
+        <figure class="dep revelar" style="--d:5">
+          <blockquote>Li em três noites. A parte dos graus mudou completamente como eu leio o signo das pessoas.</blockquote>
+          <figcaption><b>Placeholder · nome</b>cidade · uf</figcaption>
+        </figure>
+      </div>
+
+      <p class="hero-nota revelar" style="--d:6;margin-top:var(--gap-5)">
+        <!-- TROCAR: coloque aqui um número real de leitores, ou apague a linha inteira. -->
+        [inserir número real] leitores até agora · nota média [inserir] de 5
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== AUTORA ======================================================== -->
+  <!-- ⚠ SUBSTITUIR: nome, bio e credenciais abaixo são um MODELO de estrutura. -->
+  <section class="bloco" id="autora" data-grau="270">
+    <div class="dentro">
+      <p class="rotulo revelar">270° · quem escreveu</p>
+
+      <div class="autora">
+        <div class="retrato revelar" aria-hidden="true">MR</div>
+        <div class="medida">
+          <h2 class="revelar" style="--d:1">Marina Rezende</h2>
+          <p class="revelar" style="--d:2;margin-top:var(--gap-3)">Escreve sobre astrologia desde 2014, quando começou traduzindo textos técnicos que ninguém traduzia — e percebeu que a maior parte do que circula em português é resumo de resumo.</p>
+          <p class="revelar" style="--d:3;margin-top:1.1em">Passou seis anos lendo mapas de gente real antes de escrever uma linha deste livro. É a razão de ele ter um capítulo inteiro sobre os limites da ferramenta: ela viu de perto o estrago que uma leitura reduzida faz.</p>
+          <p class="revelar" style="--d:4;margin-top:1.1em"><strong>Trinta Graus</strong> é o livro que ela procurou por dez anos e não encontrou.</p>
+
+          <aside class="nota revelar" style="--d:5">
+            <b>fontes do livro</b>
+            Ptolomeu (Tetrabiblos), Lilly, Rudhyar e Hand aparecem citados com página. Onde a tradição diverge, o livro mostra as duas versões em vez de escolher em silêncio.
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== OFERTA ======================================================== -->
+  <section class="bloco escuro" id="oferta" data-grau="300">
+    <div class="dentro">
+      <p class="rotulo revelar">300° · a oferta</p>
+      <h2 class="revelar medida" style="--d:1">O livro, mais três coisas que ajudam a usar o livro.</h2>
+
+      <div class="oferta-grade">
+        <div>
+          <ul class="inclui">
+            <li class="revelar" style="--d:2"><span class="idx">01</span>
+              <h3>Trinta Graus — o ebook</h3>
+              <p>214 páginas, PDF diagramado para tela e EPUB que se adapta a qualquer leitor.</p>
+            </li>
+            <li class="revelar" style="--d:3"><span class="idx">02</span>
+              <h3>Caderno de leitura</h3>
+              <p>12 páginas imprimíveis com as cinco perguntas do capítulo 7, para usar numa conversa real.</p>
+            </li>
+            <li class="revelar" style="--d:4"><span class="idx">03</span>
+              <h3>Tabela de graus e decanatos</h3>
+              <p>Uma folha de referência em PDF, com os 360 graus divididos e legendados.</p>
+            </li>
+            <li class="revelar" style="--d:5"><span class="idx">04</span>
+              <h3>Atualizações da edição, para sempre</h3>
+              <p>Toda correção e todo acréscimo chegam no seu e-mail sem custo. Sem assinatura, sem renovação.</p>
+            </li>
+          </ul>
+        </div>
+
+        <div class="preco-caixa revelar" style="--d:3">
+          <span class="preco-de">de R$ 80,00</span><span class="preco-tag">−43% no Pix</span>
+          <strong class="preco">R$ 45,60 <small>à vista</small></strong>
+          <p class="preco-alt">ou R$ 80,00 no cartão, em até 12× de R$ 6,67</p>
+
+          <!-- TROCAR: cole o Payment Link do Stripe no href abaixo -->
+          <a class="btn" href="#oferta" data-checkout>Comprar agora <span class="seta" aria-hidden="true">→</span></a>
+
+          <p class="preco-alt" style="margin-top:var(--gap-3);text-align:center">Pagamento processado pela Stripe · Pix e cartão</p>
+
+          <div class="garantia">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M12 2.5 4 6v6c0 5 3.4 8.6 8 9.5 4.6-.9 8-4.5 8-9.5V6l-8-3.5Z"/>
+              <path d="m8.5 12 2.5 2.5 4.5-5"/>
+            </svg>
+            <p><strong>7 dias de garantia.</strong> Leu, não era o que você esperava? Responde o e-mail da compra e devolvemos os R$ 45,60 integralmente. Sem formulário e sem pergunta.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ =========================================================== -->
+  <section class="bloco" id="faq" data-grau="330">
+    <div class="dentro">
+      <p class="rotulo revelar">330° · perguntas</p>
+      <h2 class="revelar medida" style="--d:1">O que as pessoas perguntam antes de comprar.</h2>
+
+      <div class="faq revelar" style="--d:2">
+        <details>
+          <summary>É livro físico?</summary>
+          <p>Não. É ebook, só digital. Você recebe o PDF e o EPUB por e-mail, minutos depois da confirmação do pagamento. Não há versão impressa e não há frete.</p>
+        </details>
+        <details>
+          <summary>Preciso saber minha hora de nascimento?</summary>
+          <p>Não precisa de nada. Este livro é sobre os doze signos, não sobre o seu mapa individual. Nenhum dado de nascimento é pedido em momento nenhum.</p>
+        </details>
+        <details>
+          <summary>Serve para quem nunca leu nada de astrologia?</summary>
+          <p>Serve. Todo termo técnico é definido na primeira vez que aparece, no corpo do texto — você não precisa consultar glossário. Quem já estuda tem as notas laterais, que aprofundam sem atrapalhar quem está começando.</p>
+        </details>
+        <details>
+          <summary>E se eu já estudo mapa astral, vou achar raso?</summary>
+          <p>Os capítulos 3 (modalidade), 5 (regência) e 6 (limites) são justamente a parte que costuma faltar nos livros de introdução. Sendo direto: se você já domina decanato, regência tradicional e sabe defender por que o zodíaco trópico funciona, provavelmente vai achar raso — e é melhor você não comprar.</p>
+        </details>
+        <details>
+          <summary>Como pago e como recebo?</summary>
+          <p>Pix à vista com 43% de desconto (R$ 45,60), ou cartão em até 12×, totalizando R$ 80,00. O pagamento é processado pela Stripe — o site não guarda nenhum dado do seu cartão. O link de download chega no e-mail logo após a confirmação; no Pix isso costuma levar segundos.</p>
+        </details>
+        <details>
+          <summary>Consigo ler no celular?</summary>
+          <p>Sim. O EPUB se adapta a qualquer leitor de e-book, com o tamanho de letra que você preferir. O PDF foi diagramado em página única, pensado para tela vertical — não é um A4 espremido.</p>
+        </details>
+        <details>
+          <summary>Tem garantia mesmo sendo digital?</summary>
+          <p>Tem: 7 dias, conforme o direito de arrependimento do Código de Defesa do Consumidor. Basta responder o e-mail da compra dentro do prazo e a devolução é integral.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FECHAMENTO ==================================================== -->
+  <section class="bloco fechamento" id="fim" data-grau="360">
+    <div class="dentro">
+      <p class="rotulo revelar">360° · de volta ao começo</p>
+      <h2 class="revelar" style="--d:1">Trinta graus. Doze faixas. Um livro que não te trata como um dos doze.</h2>
+
+      <div class="hero-acoes revelar" style="--d:2">
+        <!-- TROCAR: cole o Payment Link do Stripe no href abaixo -->
+        <a class="btn" href="#oferta" data-checkout>Quero ler — R$&nbsp;45,60 no Pix <span class="seta" aria-hidden="true">→</span></a>
+        <a class="btn btn-vazado" href="#amostra">Reler o trecho</a>
+      </div>
+
+      <p class="hero-nota revelar" style="--d:3">de R$&nbsp;80,00 · <b>43% à vista no Pix</b> · PDF + EPUB · 7 dias de garantia</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="rodape">
+  <span>Trinta Graus · ebook · 214 páginas</span>
+  <span><a href="#topo">Voltar ao topo ↑</a></span>
+  <!-- TROCAR: troque por links reais de contato, termos e política de privacidade -->
+  <span>contato@[seudominio].com.br</span>
+</footer>
+
+<!-- ===== SELETOR DE DIREÇÃO ==============================================
+     Fica no fim do DOM de propósito: é fixo na tela, mas em ordem de tabulação
+     vem por último, para não roubar o primeiro Tab da marca.
+     ⚠ AO PUBLICAR: escolha uma direção, fixe data-tema no <html> e apague
+     este bloco + o item 1 do script. ===================================== -->
+<div class="seletor" role="group" aria-label="Trocar a direção de arte da página">
+  <button type="button" class="seletor-btn" data-set-tema="grau" aria-pressed="true">C · Grau</button>
+  <button type="button" class="seletor-btn" data-set-tema="efemeride" aria-pressed="false">A · Efeméride</button>
+  <button type="button" class="seletor-btn" data-set-tema="eclipse" aria-pressed="false">B · Eclipse</button>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var raiz = document.documentElement;
+  raiz.classList.add('js');           /* só agora o conteúdo pode começar oculto */
+
+  var reduz = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var estreito = window.matchMedia('(max-width: 47.999rem)');
+
+  /* ---- 1. troca de direção de arte ------------------------------------- */
+  var botoes = document.querySelectorAll('[data-set-tema]');
+  var temaCor = { grau: '#E9E7E1', efemeride: '#0E1420', eclipse: '#1A1512' };
+  var metaCor = document.querySelector('meta[name="theme-color"]');
+
+  Array.prototype.forEach.call(botoes, function (b) {
+    b.addEventListener('click', function () {
+      var t = b.getAttribute('data-set-tema');
+      raiz.setAttribute('data-tema', t);
+      if (metaCor) metaCor.setAttribute('content', temaCor[t] || '#E9E7E1');
+      Array.prototype.forEach.call(botoes, function (o) {
+        o.setAttribute('aria-pressed', String(o === b));
+      });
+      medir();
+    });
+  });
+
+  /* ---- 2. revelação ao scroll ------------------------------------------ */
+  var alvos = document.querySelectorAll('.revelar');
+
+  if (!('IntersectionObserver' in window) || reduz.matches) {
+    Array.prototype.forEach.call(alvos, function (el) { el.classList.add('visivel'); });
+  } else {
+    var obs = new IntersectionObserver(function (linhas) {
+      linhas.forEach(function (l) {
+        if (l.isIntersecting) {
+          l.target.classList.add('visivel');
+          obs.unobserve(l.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+
+    Array.prototype.forEach.call(alvos, function (el) { obs.observe(el); });
+  }
+
+  /* ---- 3. agulha da régua de graus ------------------------------------- */
+  /* Grava --prog (0→1) na raiz. O CSS decide se vira translateY (desktop)
+     ou scaleX (celular). Só transform e opacity são animados.              */
+  var marcador = document.getElementById('grauAtual');
+  var alturaDoc = 0, pendente = false;
+
+  function medir() {
+    alturaDoc = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    pintar();
+  }
+
+  function pintar() {
+    var p = Math.min(1, Math.max(0, window.pageYOffset / alturaDoc));
+    raiz.style.setProperty('--prog', p.toFixed(4));
+    if (marcador) marcador.textContent = Math.round(p * 360) + '°';
+    pendente = false;
+  }
+
+  function aoRolar() {
+    if (!pendente) { pendente = true; window.requestAnimationFrame(pintar); }
+  }
+
+  window.addEventListener('scroll', aoRolar, { passive: true });
+  window.addEventListener('resize', medir);
+  window.addEventListener('load', medir);
+  medir();
+
+  /* ---- 4. rolagem suave para as âncoras internas ------------------------ */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if (!a) return;
+    var alvo = document.querySelector(a.getAttribute('href'));
+    if (!alvo) return;
+    e.preventDefault();
+    alvo.scrollIntoView({
+      behavior: reduz.matches ? 'auto' : 'smooth',
+      block: 'start'
+    });
+    /* mantém o foco de teclado onde a página foi parar */
+    alvo.setAttribute('tabindex', '-1');
+    alvo.focus({ preventScroll: true });
+  });
+
+  /* ---- 5. no celular, a órbita do eclipse é desligada ------------------- */
+  function ajustarMovimento() {
+    var disco = document.querySelector('.disco-b');
+    if (!disco) return;
+    disco.style.animationPlayState = (estreito.matches || reduz.matches) ? 'paused' : 'running';
+  }
+  ajustarMovimento();
+  if (estreito.addEventListener) estreito.addEventListener('change', ajustarMovimento);
+})();
+</script>
+
+</body>
+</html>

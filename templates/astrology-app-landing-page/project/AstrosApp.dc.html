@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/nocturne-dae32a1b-95d2-4f36-863b-0d9f6c90f957/styles.css">
+<script src="_ds/nocturne-dae32a1b-95d2-4f36-863b-0d9f6c90f957/_ds_bundle.js"></script>
+<style>
+@keyframes astTwinkle{0%,100%{opacity:.18}50%{opacity:.85}}
+@keyframes astDrift{0%{transform:translate3d(-4%,0,0) scale(1.05)}100%{transform:translate3d(4%,2%,0) scale(1.12)}}
+@keyframes astBreathe{0%,100%{opacity:.35;transform:scale(.96)}50%{opacity:.7;transform:scale(1.04)}}
+@keyframes astRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes astSpin{to{transform:rotate(360deg)}}
+.ast-scroll::-webkit-scrollbar{width:0}
+</style>
+</helmet>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="1" hint-size="402px,874px">
+<div class="ast-scroll" style="min-height:100%;background:#161826;color:#e9e9ed;font-family:Inter,system-ui;position:relative;padding-top:54px">
+
+<div style="position:absolute;inset:0 0 auto 0;height:420px;overflow:hidden;pointer-events:none">
+<div style="position:absolute;inset:-20%;background:radial-gradient(60% 45% at 30% 12%,rgba(66,58,106,.85),transparent 70%),radial-gradient(45% 35% at 85% 30%,rgba(38,42,96,.7),transparent 72%);animation:astDrift 26s ease-in-out infinite alternate"></div>
+<sc-for list="{{ stars }}" as="st" hint-placeholder-count="20">
+<i style="{{ st.css }}"></i>
+</sc-for>
+</div>
+
+<sc-if value="{{ isAuth }}" hint-placeholder-val="{{ true }}">
+<div style="position:relative;padding:0 20px 28px;animation:astRise .4s ease both">
+<div style="display:flex;align-items:center;gap:8px;padding:6px 0 18px">
+<sc-if value="{{ authBack }}"><button onClick="{{ prevStep }}" class="btn btn-ghost" style="padding:0;min-height:0"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9184d9" stroke-width="1.6" stroke-linecap="round"><path d="M14 6l-6 6 6 6"></path></svg></button></sc-if>
+<div style="display:flex;gap:5px;margin-left:auto">
+<sc-for list="{{ stepDots }}" as="d" hint-placeholder-count="3"><i style="{{ d.css }}"></i></sc-for>
+</div>
+</div>
+<div style="display:flex;justify-content:center;margin-bottom:14px"><svg width="66" height="66" viewBox="0 0 24 24" fill="none" stroke="#b5abfc" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 14px rgba(145,132,217,.45))"><path d="M3.5 12a8.5 8.5 0 1 0 17 0a8.5 8.5 0 1 0-17 0"></path><path d="M10.8 12a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0-2.4 0"></path><path d="M12 1v2 M12 21v2 M1 12h2 M21 12h2 M4.2 4.2l1.4 1.4 M18.4 18.4l1.4 1.4 M19.8 4.2l-1.4 1.4 M5.6 18.4l-1.4 1.4"></path></svg></div>
+<div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9184d9;text-align:center;margin-bottom:6px">{{ authKicker }}</div>
+<h2 style="font-size:26px;line-height:1.15;letter-spacing:-.02em;margin:0 0 6px;text-align:center">{{ authTitle }}</h2>
+<p style="font-size:12.5px;line-height:1.6;color:#9397ab;text-align:center;margin:0 0 22px">{{ authSub }}</p>
+
+<sc-if value="{{ step1 }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div class="field"><label>Nome completo</label><input class="input" value="Marina Duarte Andrade" placeholder="Como o céu vai te chamar"></div>
+<div class="field"><label>E-mail</label><input class="input" value="marina@exemplo.com" placeholder="voce@email.com"></div>
+<div class="field"><label>Senha</label><input class="input" type="password" value="constelacao" placeholder="mínimo 8 caracteres"></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ step2 }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div class="field"><label>Data de nascimento</label>
+<div style="display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px"><input class="input" value="12" placeholder="dia" style="text-align:center;font-variant-numeric:tabular-nums"><input class="input" value="08" placeholder="mês" style="text-align:center;font-variant-numeric:tabular-nums"><input class="input" value="1994" placeholder="ano" style="text-align:center;font-variant-numeric:tabular-nums"></div>
+</div>
+<div class="field"><label>Hora exata</label>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input class="input" value="22" placeholder="hh" style="text-align:center;font-variant-numeric:tabular-nums"><input class="input" value="40" placeholder="mm" style="text-align:center;font-variant-numeric:tabular-nums"></div>
+</div>
+<button onClick="{{ toggleHora }}" style="display:flex;align-items:center;gap:9px;background:transparent;border:0;padding:4px 0;cursor:pointer;text-align:left;color:#e9e9ed;font:inherit">
+<i style="{{ horaBoxCss }}"></i>
+<span style="font-size:12.5px;color:#b2b6ca">Não sei a hora — usar meio-dia solar</span>
+</button>
+<div class="card" style="background:rgba(66,58,106,.35);box-shadow:0 0 0 1px #423a6a;gap:4px">
+<div class="card-meta" style="color:#b5abfc">
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6l4 2"></path></svg>
+<span>por que a hora importa</span>
+</div>
+<p class="card-body" style="font-size:11.5px;opacity:.75;margin:0">O Ascendente muda a cada quatro minutos. Sem a hora, o mapa perde as casas — e as casas são onde a vida acontece.</p>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ step3 }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div class="field"><label>Local de nascimento</label>
+<div style="position:relative"><input class="input" value="Belo Hori" placeholder="cidade, estado, país" style="padding-left:32px">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#75798c" stroke-width="1.6" stroke-linecap="round" style="position:absolute;left:10px;top:11px"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4.5 4.5"></path></svg></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<sc-for list="{{ cities }}" as="c" hint-placeholder-count="3">
+<button onClick="{{ c.pick }}" style="{{ c.css }}">
+<span style="display:flex;flex-direction:column;gap:2px;text-align:left"><span style="font-size:13.5px">{{ c.name }}</span><span style="font-size:10.5px;color:#75798c;font-variant-numeric:tabular-nums">{{ c.coord }}</span></span>
+<i style="{{ c.dotCss }}"></i>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<button onClick="{{ nextStep }}" class="btn btn-primary btn-block" style="min-height:44px;margin-top:22px;letter-spacing:.01em">{{ authCta }}</button>
+<div style="text-align:center;margin-top:12px;font-size:12px;color:#75798c">Já tem conta? <a href="#" style="color:#b5abfc;text-decoration:none">Entrar</a></div>
+<p style="font-size:10px;line-height:1.5;color:#595d6c;text-align:center;margin:16px 0 0">Seus dados de nascimento servem só ao cálculo do mapa. Nada é vendido, nada é lido por outros olhos.</p>
+</div>
+</sc-if>
+
+<sc-if value="{{ isHome }}">
+<div style="position:relative;padding:0 18px 96px">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;padding:2px 0 14px">
+<div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9184d9">quinta, 14 de agosto</div><div style="font-size:22px;letter-spacing:-.02em;margin-top:2px">Boa noite, Marina</div></div>
+<button class="btn btn-icon btn-secondary" style="position:relative;border-radius:999px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cfd3e5" stroke-width="1.5" stroke-linecap="round"><path d="M6 10a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5h-15S6 14 6 10z"></path><path d="M10 19a2.2 2.2 0 0 0 4 0"></path></svg><i style="position:absolute;top:6px;right:7px;width:6px;height:6px;border-radius:999px;background:#9184d9;box-shadow:0 0 8px #9184d9"></i></button>
+</div>
+
+<div style="position:relative;border-radius:14px;overflow:hidden;box-shadow:0 0 0 1px #423a6a;background:linear-gradient(160deg,rgba(66,58,106,.75),rgba(35,37,50,.9) 60%)">
+<div style="position:absolute;right:-34px;top:-30px;width:190px;height:190px;border-radius:999px;background:radial-gradient(circle,rgba(181,171,252,.35),transparent 65%);animation:astBreathe 7s ease-in-out infinite"></div>
+<div style="position:relative;padding:16px 16px 14px">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+<div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#b5abfc">agora no céu</div>
+<div style="font-size:27px;letter-spacing:-.025em;margin-top:5px;line-height:1.05">Sol em Leão</div>
+<div style="font-size:13px;color:#cfd3e5;font-variant-numeric:tabular-nums;margin-top:3px">22°14′ · decanato III · casa X</div></div>
+<svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#f5f4ff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none;filter:drop-shadow(0 0 12px rgba(181,171,252,.6))"><path d="M11.7 12.6a4 4 0 1 0 .7 3.4"></path><path d="M12.4 16C14.5 6 20 4.5 20 9.5C20 13 16.5 13.5 15 11"></path></svg>
+</div>
+<p style="font-size:13px;line-height:1.65;color:#e4e7f5;margin:12px 0 0;text-wrap:pretty">A luz insiste. Hoje o orgulho pede propósito: mostre o trabalho, não o brilho. O que você faz por amor encontra plateia.</p>
+<button onClick="{{ goHoroscopo }}" class="btn btn-ghost" style="padding:8px 0 0;font-size:12.5px">ler o horóscopo de hoje
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"></path></svg></button>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+<div class="card elev-sm" style="gap:8px">
+<div class="card-kicker">lua</div>
+<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d2cefd" stroke-width="1.3" stroke-linecap="round"><path d="M15 3.5A9.5 9.5 0 1 0 15 20.5A11.5 11.5 0 0 1 15 3.5"></path></svg>
+<div><div style="font-size:14px">Minguante</div><div style="font-size:11px;color:#9397ab;font-variant-numeric:tabular-nums">68% · Peixes 8°02′</div></div>
+</div>
+<div class="card elev-sm" style="gap:8px">
+<div class="card-kicker">do dia</div>
+<div style="display:flex;align-items:center;gap:10px">
+<div style="width:38px;height:38px;border-radius:999px;background:linear-gradient(150deg,#5d5294,#2b2741);box-shadow:0 0 0 1px #9184d9"></div>
+<div style="font-size:31px;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:#b5abfc">7</div>
+</div>
+<div><div style="font-size:14px">Índigo</div><div style="font-size:11px;color:#9397ab">cor e número</div></div>
+</div>
+</div>
+
+<div style="display:flex;align-items:baseline;justify-content:space-between;margin:22px 0 8px">
+<h4 style="font-size:15px;margin:0">Trânsitos de hoje</h4><span style="font-size:11px;color:#75798c">14 ago · GMT-3</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:1px">
+<sc-for list="{{ transits }}" as="t" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;gap:10px;padding:10px 2px;background:linear-gradient(to right,transparent,rgba(233,233,237,.08) 20px,rgba(233,233,237,.08) calc(100% - 20px),transparent) no-repeat bottom/100% 1px">
+<div style="display:flex;align-items:center;gap:5px;flex:none">
+<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#d2cefd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ t.a }}"></path></svg>
+<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="{{ t.ink }}" stroke-width="1.8" stroke-linecap="round"><path d="{{ t.asp }}"></path></svg>
+<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#d2cefd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ t.b }}"></path></svg>
+</div>
+<div style="flex:1;min-width:0"><div style="font-size:13px">{{ t.title }}</div><div style="font-size:11px;color:#75798c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.note }}</div></div>
+<div style="font-size:11px;color:#9397ab;font-variant-numeric:tabular-nums;flex:none">{{ t.time }}</div>
+</div>
+</sc-for>
+</div>
+
+<div style="margin-top:22px;border-radius:14px;padding:14px;box-shadow:0 0 0 1px #3f424d;background:#232532">
+<div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b5abfc" stroke-width="1.5" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-3.2-6.4"></path><path d="M20 4v5h-5"></path></svg>
+<div style="font-size:14px">Retrógrados</div><div style="margin-left:auto" class="tag tag-accent">2 ativos</div>
+</div>
+<sc-for list="{{ retro }}" as="r" hint-placeholder-count="2">
+<div style="padding:8px 0 2px">
+<div style="display:flex;align-items:center;gap:8px;font-size:12.5px">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d2cefd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.glyph }}"></path></svg>
+<span>{{ r.name }}</span><span style="margin-left:auto;color:#75798c;font-variant-numeric:tabular-nums">{{ r.until }}</span>
+</div>
+<div style="height:3px;border-radius:999px;background:#2b2741;margin-top:7px;overflow:hidden"><i style="{{ r.barCss }}"></i></div>
+</div>
+</sc-for>
+</div>
+
+<div style="margin-top:14px;border-radius:14px;padding:14px;box-shadow:0 0 0 1px #9184d9;background:radial-gradient(120% 100% at 0% 0%,rgba(66,58,106,.6),rgba(35,37,50,.6))">
+<div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#b5abfc;margin-bottom:6px">alerta pessoal</div>
+<p style="font-size:13px;line-height:1.6;margin:0;color:#e4e7f5">Vênus cruza o seu Ascendente às <span style="font-variant-numeric:tabular-nums">19h42</span> — um encontro pede coragem, não estratégia.</p>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isMapa }}">
+<div style="position:relative;padding:0 18px 96px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 0 12px">
+<div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9184d9">carta natal</div><div style="font-size:22px;letter-spacing:-.02em">Marina Duarte</div></div>
+<button class="btn btn-icon btn-secondary" style="border-radius:999px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#cfd3e5" stroke-width="1.5" stroke-linecap="round"><path d="M12 3v12M8 11l4 4 4-4M5 20h14"></path></svg></button>
+</div>
+<div style="font-size:11.5px;color:#75798c;font-variant-numeric:tabular-nums;margin-bottom:12px">12 ago 1994 · 22h40 · Belo Horizonte, MG · Placidus</div>
+<div class="seg" style="width:100%;margin-bottom:14px">
+<label class="seg-opt" style="flex:1;justify-content:center"><input type="radio" name="astmode" checked><span>Natal</span></label>
+<label class="seg-opt" style="flex:1;justify-content:center"><input type="radio" name="astmode"><span>Trânsito</span></label>
+<label class="seg-opt" style="flex:1;justify-content:center"><input type="radio" name="astmode"><span>Sinastria</span></label>
+</div>
+<dc-import name="ZodiacWheel" active-sign="{{ activeSign }}" on-select-sign="{{ selectSign }}" hint-size="100%,340px"></dc-import>
+<div style="display:flex;gap:14px;justify-content:center;margin-top:10px;font-size:10.5px;color:#75798c">
+<span style="display:flex;align-items:center;gap:5px"><i style="width:14px;height:1px;background:#9184d9;display:block"></i>harmônico</span>
+<span style="display:flex;align-items:center;gap:5px"><i style="width:14px;height:0;border-top:1px dashed #75798c;display:block"></i>tensão</span>
+</div>
+
+<sc-if value="{{ hasActive }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top:14px;border-radius:14px;padding:13px;background:#232532;box-shadow:0 0 0 1px #9184d9;animation:astRise .3s ease both">
+<div style="display:flex;align-items:center;gap:11px">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#f5f4ff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ activeGlyph }}"></path></svg>
+<div><div style="font-size:16px">{{ activeName }}</div><div style="font-size:11px;color:#9397ab">{{ activeMeta }}</div></div>
+<button onClick="{{ goSigno }}" class="btn btn-ghost" style="margin-left:auto;font-size:12px">abrir signo
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"></path></svg></button>
+</div>
+</div>
+</sc-if>
+
+<div style="display:flex;align-items:baseline;justify-content:space-between;margin:22px 0 4px">
+<h4 style="font-size:15px;margin:0">Planetas</h4><span style="font-size:11px;color:#75798c">grau · signo · casa</span>
+</div>
+<div>
+<sc-for list="{{ bodies }}" as="b" hint-placeholder-count="10">
+<div style="display:flex;align-items:center;gap:10px;padding:9px 2px;background:linear-gradient(to right,transparent,rgba(233,233,237,.08) 20px,rgba(233,233,237,.08) calc(100% - 20px),transparent) no-repeat bottom/100% 1px">
+<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{ b.ink }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ b.glyph }}"></path></svg>
+<span style="font-size:13px;flex:1">{{ b.name }}</span>
+<span style="font-size:12.5px;color:#cfd3e5;font-variant-numeric:tabular-nums">{{ b.deg }}</span>
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9184d9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ b.signGlyph }}"></path></svg>
+<span style="font-size:11px;color:#75798c;width:26px;text-align:right;flex:none">{{ b.house }}</span>
+</div>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+<div class="card elev-sm" style="gap:2px"><div class="card-kicker">ascendente</div><div style="font-size:15px">Escorpião</div><div style="font-size:11px;color:#9397ab;font-variant-numeric:tabular-nums">18°07′</div></div>
+<div class="card elev-sm" style="gap:2px"><div class="card-kicker">meio do céu</div><div style="font-size:15px">Leão</div><div style="font-size:11px;color:#9397ab;font-variant-numeric:tabular-nums">21°44′</div></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isHoroscopo }}">
+<div style="position:relative;padding:0 18px 96px">
+<div style="padding:2px 0 12px"><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9184d9">leão · sol natal</div><div style="font-size:22px;letter-spacing:-.02em">Horóscopo</div></div>
+<div class="seg" style="width:100%;margin-bottom:14px">
+<sc-for list="{{ periods }}" as="p" hint-placeholder-count="4">
+<label class="seg-opt" style="{{ p.css }}" onClick="{{ p.pick }}"><input type="radio" name="astper" checked="{{ p.on }}"><span>{{ p.label }}</span></label>
+</sc-for>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:2px 0 14px">
+<button class="btn btn-icon btn-secondary" style="border-radius:999px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#cfd3e5" stroke-width="1.6" stroke-linecap="round"><path d="M14 6l-6 6 6 6"></path></svg></button>
+<div style="text-align:center"><div style="font-size:14px;font-variant-numeric:tabular-nums">{{ periodRange }}</div><div style="font-size:10.5px;color:#75798c">{{ periodRuler }}</div></div>
+<button class="btn btn-icon btn-secondary" style="border-radius:999px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#cfd3e5" stroke-width="1.6" stroke-linecap="round"><path d="M10 6l6 6-6 6"></path></svg></button>
+</div>
+<div style="border-radius:14px;padding:16px;background:linear-gradient(155deg,rgba(66,58,106,.5),rgba(35,37,50,.85));box-shadow:0 0 0 1px #3f424d">
+<p style="font-size:17px;line-height:1.4;letter-spacing:-.01em;margin:0 0 12px;color:#f3f5fe;text-wrap:pretty">{{ periodLede }}</p>
+<div style="height:1px;background:linear-gradient(to right,transparent,rgba(233,233,237,.16) 20px,rgba(233,233,237,.16) calc(100% - 20px),transparent);margin:0 0 12px"></div>
+<p style="font-size:13.5px;line-height:1.75;margin:0;color:#cfd3e5;text-wrap:pretty"><span style="float:left;font-size:44px;line-height:.86;padding:2px 8px 0 0;color:#b5abfc">{{ periodDrop }}</span>{{ periodBody1 }}</p>
+<p style="font-size:13.5px;line-height:1.75;margin:12px 0 0;color:#cfd3e5;text-wrap:pretty">{{ periodBody2 }}</p>
+</div>
+<h4 style="font-size:15px;margin:22px 0 8px">Áreas da vida</h4>
+<div style="display:flex;flex-direction:column;gap:11px">
+<sc-for list="{{ areas }}" as="a" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;gap:11px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9184d9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ a.icon }}"></path></svg>
+<span style="font-size:13px;width:74px;flex:none">{{ a.name }}</span>
+<div style="flex:1;display:flex;gap:4px"><sc-for list="{{ a.dots }}" as="d" hint-placeholder-count="5"><i style="{{ d.css }}"></i></sc-for></div>
+<span style="font-size:11px;color:#75798c;flex:none">{{ a.word }}</span>
+</div>
+</sc-for>
+</div>
+<div style="margin-top:20px;border-radius:14px;padding:14px;background:#232532;box-shadow:0 0 0 1px #3f424d">
+<div class="card-kicker" style="margin-bottom:6px">aspecto regente</div>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#d2cefd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9a4 4 0 1 0 8 0a4 4 0 1 0-8 0"></path><path d="M12 13v8 M9 17.5h6"></path></svg>
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9184d9" stroke-width="1.8" stroke-linecap="round"><path d="M12 4l8 15H4z"></path></svg>
+<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#d2cefd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 7.5C4.5 15 19.5 15 19.5 7.5 M4.5 7.5V10.5 M19.5 7.5V10.5 M12 5V21 M8 18.5h8"></path></svg>
+<span style="font-size:13px;margin-left:4px">Vênus trígono Netuno</span>
+</div>
+<p style="font-size:12.5px;line-height:1.6;color:#9397ab;margin:0">Orbe de 1°14′, aplicativo. A beleza chega sem esforço — e some se você tentar segurá-la.</p>
+</div>
+<button onClick="{{ goPremium }}" class="btn btn-primary btn-block" style="min-height:42px;margin-top:18px">Desbloquear leitura completa</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSigno }}">
+<div style="position:relative;padding:0 18px 96px">
+<div style="display:flex;align-items:center;gap:8px;padding:2px 0 10px">
+<button onClick="{{ goMapa }}" class="btn btn-icon btn-secondary" style="border-radius:999px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#cfd3e5" stroke-width="1.6" stroke-linecap="round"><path d="M14 6l-6 6 6 6"></path></svg></button>
+<span style="font-size:12px;color:#9397ab">os doze signos</span>
+</div>
+<div style="display:flex;justify-content:center;margin:6px 0 14px">
+<svg width="176" height="176" viewBox="0 0 120 120">
+<defs><pattern id="asHatch" width="5" height="5" patternTransform="rotate(38)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="5" stroke="#9184d9" stroke-opacity="0.3" stroke-width="0.9"></line></pattern></defs>
+<circle cx="60" cy="60" r="56" fill="url(#asHatch)" opacity="0.7"></circle>
+<circle cx="60" cy="60" r="56" fill="none" stroke="#595d6c" stroke-width="0.7"></circle>
+<circle cx="60" cy="60" r="49" fill="#161826" stroke="#9184d9" stroke-width="0.6" opacity="0.95"></circle>
+<g style="animation:astSpin 90s linear infinite;transform-origin:60px 60px">
+<sc-for list="{{ plateTicks }}" as="t" hint-placeholder-count="36"><line x1="{{ t.x1 }}" y1="{{ t.y1 }}" x2="{{ t.x2 }}" y2="{{ t.y2 }}" stroke="#b2b6ca" stroke-width="0.5" opacity="0.45"></line></sc-for>
+</g>
+<g transform="translate(36 36) scale(2)"><path d="{{ signoGlyph }}" fill="none" stroke="#f5f4ff" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px rgba(181,171,252,.7))"></path></g>
+<sc-for list="{{ plateStars }}" as="s" hint-placeholder-count="9"><circle cx="{{ s.x }}" cy="{{ s.y }}" r="{{ s.r }}" fill="#e9e9ed" opacity="{{ s.o }}"></circle></sc-for>
+</svg>
+</div>
+<div style="text-align:center">
+<h2 style="font-size:30px;letter-spacing:-.025em;margin:0">{{ signoName }}</h2>
+<div style="font-size:12px;color:#9397ab;font-variant-numeric:tabular-nums;margin-top:2px">{{ signoDates }}</div>
+<div style="display:flex;gap:6px;justify-content:center;margin-top:10px">
+<span class="tag tag-accent">{{ signoEl }}</span><span class="tag tag-neutral">{{ signoMod }}</span><span class="tag tag-outline">regente&#160;{{ signoRuler }}</span>
+</div>
+</div>
+<p style="font-size:13.5px;line-height:1.75;color:#cfd3e5;margin:16px 0 0;text-wrap:pretty">{{ signoBody }}</p>
+<div style="margin-top:18px;border-radius:14px;background:#232532;box-shadow:0 0 0 1px #3f424d;overflow:hidden">
+<sc-for list="{{ signoRows }}" as="r" hint-placeholder-count="6">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:linear-gradient(to right,transparent,rgba(233,233,237,.07) 16px,rgba(233,233,237,.07) calc(100% - 16px),transparent) no-repeat bottom/100% 1px">
+<span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#75798c">{{ r.k }}</span><span style="font-size:13.5px">{{ r.v }}</span>
+</div>
+</sc-for>
+</div>
+<h4 style="font-size:15px;margin:20px 0 8px">Virtudes</h4>
+<div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ signoVirtues }}" as="v" hint-placeholder-count="5"><span class="tag tag-accent-2">{{ v.t }}</span></sc-for></div>
+<h4 style="font-size:15px;margin:18px 0 8px">Sombra</h4>
+<div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ signoShadow }}" as="v" hint-placeholder-count="4"><span class="tag tag-neutral">{{ v.t }}</span></sc-for></div>
+<div style="display:flex;gap:8px;overflow:hidden;margin-top:20px">
+<sc-for list="{{ signStrip }}" as="s" hint-placeholder-count="12">
+<button onClick="{{ s.pick }}" style="{{ s.css }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ s.ink }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ s.glyph }}"></path></svg></button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSinastria }}">
+<div style="position:relative;padding:0 18px 96px">
+<div style="padding:2px 0 14px"><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9184d9">dois mapas, um céu</div><div style="font-size:22px;letter-spacing:-.02em">Sinastria</div></div>
+<div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:6px">
+<div style="text-align:center;flex:1"><div style="width:52px;height:52px;border-radius:999px;margin:0 auto 6px;display:grid;place-items:center;background:linear-gradient(150deg,#423a6a,#232532);box-shadow:0 0 0 1px #5d5294;font-size:17px;color:#e7e5fe">MD</div><div style="font-size:13px">Marina</div><div style="font-size:10.5px;color:#75798c">Leão · Asc Escorpião</div></div>
+<svg width="88" height="88" viewBox="0 0 100 100" style="flex:none">
+<circle cx="50" cy="50" r="40" fill="none" stroke="#2b2741" stroke-width="6"></circle>
+<circle cx="50" cy="50" r="40" fill="none" stroke="#9184d9" stroke-width="6" stroke-linecap="round" stroke-dasharray="196 251" transform="rotate(-90 50 50)" style="filter:drop-shadow(0 0 6px rgba(145,132,217,.6))"></circle>
+<text x="50" y="52" text-anchor="middle" dominant-baseline="middle" fill="#f3f5fe" font-family="Inter, system-ui" font-size="22" style="font-variant-numeric:tabular-nums">78</text>
+<text x="50" y="68" text-anchor="middle" fill="#9397ab" font-family="Inter, system-ui" font-size="8" letter-spacing="1.4">AFINIDADE</text>
+</svg>
+<div style="text-align:center;flex:1"><div style="width:52px;height:52px;border-radius:999px;margin:0 auto 6px;display:grid;place-items:center;background:linear-gradient(150deg,#2b293a,#232532);box-shadow:0 0 0 1px #5c5783;font-size:17px;color:#e7e5fe">RS</div><div style="font-size:13px">Rafael</div><div style="font-size:10.5px;color:#75798c">Aquário · Asc Touro</div></div>
+</div>
+<p style="font-size:13px;line-height:1.7;color:#cfd3e5;text-align:center;margin:10px 0 18px;text-wrap:pretty">Fogo e ar: a conversa acende rápido. O trabalho de vocês é sustentar a chama sem queimar o oxigênio.</p>
+<div style="display:flex;flex-direction:column;gap:12px">
+<sc-for list="{{ synastry }}" as="s" hint-placeholder-count="4">
+<div>
+<div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px"><span>{{ s.name }}</span><span style="color:#9397ab;font-variant-numeric:tabular-nums">{{ s.v }}</span></div>
+<div style="height:4px;border-radius:999px;background:#2b2741;overflow:hidden"><i style="{{ s.barCss }}"></i></div>
+</div>
+</sc-for>
+</div>
+<h4 style="font-size:15px;margin:22px 0 6px">Aspectos entre vocês</h4>
+<div>
+<sc-for list="{{ synAspects }}" as="a" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;gap:9px;padding:10px 2px;background:linear-gradient(to right,transparent,rgba(233,233,237,.08) 20px,rgba(233,233,237,.08) calc(100% - 20px),transparent) no-repeat bottom/100% 1px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d2cefd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ a.a }}"></path></svg>
+<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="{{ a.ink }}" stroke-width="1.8" stroke-linecap="round"><path d="{{ a.asp }}"></path></svg>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d2cefd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ a.b }}"></path></svg>
+<div style="flex:1;min-width:0;margin-left:2px"><div style="font-size:12.5px">{{ a.title }}</div><div style="font-size:11px;color:#75798c">{{ a.note }}</div></div>
+<span style="font-size:11px;color:#9397ab;font-variant-numeric:tabular-nums">{{ a.orb }}</span>
+</div>
+</sc-for>
+</div>
+<button class="btn btn-secondary btn-block" style="min-height:42px;margin-top:18px">Adicionar outra pessoa</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPremium }}">
+<div style="position:relative;padding:0 18px 96px">
+<div style="display:flex;justify-content:flex-end;padding:2px 0"><button onClick="{{ goHome }}" class="btn btn-icon btn-secondary" style="border-radius:999px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#cfd3e5" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></div>
+<div style="display:flex;justify-content:center;margin:4px 0 14px">
+<svg width="104" height="104" viewBox="0 0 100 100">
+<circle cx="50" cy="50" r="46" fill="none" stroke="#423a6a" stroke-width="0.8"></circle>
+<sc-for list="{{ crownRays }}" as="r" hint-placeholder-count="24"><path d="{{ r.d }}" fill="#b5abfc" opacity="{{ r.o }}"></path></sc-for>
+<circle cx="50" cy="50" r="17" fill="none" stroke="#e7e5fe" stroke-width="1"></circle>
+<circle cx="50" cy="50" r="3" fill="#f5f4ff"></circle>
+<circle cx="50" cy="50" r="26" fill="none" stroke="#9184d9" stroke-width="0.6" stroke-dasharray="2 4"></circle>
+</svg>
+</div>
+<h2 style="font-size:27px;letter-spacing:-.025em;text-align:center;margin:0">Astros Pleno</h2>
+<p style="font-size:13px;line-height:1.65;color:#9397ab;text-align:center;margin:6px 0 20px;text-wrap:pretty">O céu inteiro, não só a manchete. Trânsitos em tempo real, revisão de casas e leituras longas escritas para a sua carta.</p>
+<div style="display:flex;flex-direction:column;gap:9px">
+<sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+<button onClick="{{ p.pick }}" style="{{ p.css }}">
+<i style="{{ p.dotCss }}"></i>
+<span style="display:flex;flex-direction:column;gap:2px;text-align:left;flex:1"><span style="font-size:14px">{{ p.name }}</span><span style="font-size:11px;color:#9397ab">{{ p.note }}</span></span>
+<span style="text-align:right"><span style="display:block;font-size:15px;font-variant-numeric:tabular-nums">{{ p.price }}</span><span style="display:block;font-size:10.5px;color:#75798c">{{ p.per }}</span></span>
+</button>
+</sc-for>
+</div>
+<div style="margin-top:18px;display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ perks }}" as="k" hint-placeholder-count="5">
+<div style="display:flex;align-items:flex-start;gap:10px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9184d9" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><path d="M4 12.5l5 5L20 6.5"></path></svg>
+<span style="font-size:13px;line-height:1.5;color:#cfd3e5">{{ k.t }}</span>
+</div>
+</sc-for>
+</div>
+<button class="btn btn-primary btn-block" style="min-height:46px;margin-top:20px;font-size:14.5px">Começar 7 dias grátis</button>
+<p style="font-size:10.5px;line-height:1.55;color:#595d6c;text-align:center;margin:10px 0 0">Depois {{ planPrice }}. Cancele quando quiser — o céu não cobra multa.</p>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAjustes }}">
+<div style="position:relative;padding:0 18px 96px">
+<div style="padding:2px 0 16px"><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9184d9">sua conta</div><div style="font-size:22px;letter-spacing:-.02em">Perfil</div></div>
+<div style="display:flex;align-items:center;gap:13px;padding:14px;border-radius:14px;background:linear-gradient(150deg,rgba(66,58,106,.6),rgba(35,37,50,.9));box-shadow:0 0 0 1px #423a6a">
+<div style="width:56px;height:56px;border-radius:999px;display:grid;place-items:center;background:#161826;box-shadow:0 0 0 1px #9184d9;flex:none">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e7e5fe" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M11.7 12.6a4 4 0 1 0 .7 3.4"></path><path d="M12.4 16C14.5 6 20 4.5 20 9.5C20 13 16.5 13.5 15 11"></path></svg>
+</div>
+<div style="flex:1"><div style="font-size:17px">Marina Duarte</div><div style="font-size:11.5px;color:#b2b6ca">Sol Leão · Asc Escorpião · Lua Peixes</div></div>
+<span class="tag tag-outline">Pleno</span>
+</div>
+<h4 style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#75798c;margin:20px 0 8px">Dados de nascimento</h4>
+<div style="border-radius:14px;background:#232532;box-shadow:0 0 0 1px #3f424d;overflow:hidden">
+<sc-for list="{{ birthRows }}" as="r" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:linear-gradient(to right,transparent,rgba(233,233,237,.07) 16px,rgba(233,233,237,.07) calc(100% - 16px),transparent) no-repeat bottom/100% 1px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9184d9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ r.icon }}"></path></svg>
+<span style="font-size:12px;color:#9397ab;flex:1">{{ r.k }}</span>
+<span style="font-size:13px;font-variant-numeric:tabular-nums">{{ r.v }}</span>
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#595d6c" stroke-width="1.6" stroke-linecap="round" style="flex:none"><path d="M10 6l6 6-6 6"></path></svg>
+</div>
+</sc-for>
+</div>
+<h4 style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#75798c;margin:20px 0 8px">Notificações</h4>
+<div style="border-radius:14px;background:#232532;box-shadow:0 0 0 1px #3f424d;overflow:hidden">
+<sc-for list="{{ toggles }}" as="t" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:linear-gradient(to right,transparent,rgba(233,233,237,.07) 16px,rgba(233,233,237,.07) calc(100% - 16px),transparent) no-repeat bottom/100% 1px">
+<span style="display:flex;flex-direction:column;gap:2px;flex:1"><span style="font-size:13px">{{ t.name }}</span><span style="font-size:11px;color:#75798c">{{ t.note }}</span></span>
+<button onClick="{{ t.toggle }}" style="{{ t.trackCss }}"><i style="{{ t.knobCss }}"></i></button>
+</div>
+</sc-for>
+</div>
+<h4 style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#75798c;margin:20px 0 8px">Conta</h4>
+<div style="border-radius:14px;background:#232532;box-shadow:0 0 0 1px #3f424d;overflow:hidden">
+<sc-for list="{{ acctRows }}" as="r" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:linear-gradient(to right,transparent,rgba(233,233,237,.07) 16px,rgba(233,233,237,.07) calc(100% - 16px),transparent) no-repeat bottom/100% 1px">
+<span style="font-size:13px;flex:1">{{ r.k }}</span><span style="font-size:12.5px;color:#9397ab">{{ r.v }}</span>
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#595d6c" stroke-width="1.6" stroke-linecap="round" style="flex:none"><path d="M10 6l6 6-6 6"></path></svg>
+</div>
+</sc-for>
+</div>
+<button class="btn btn-ghost btn-block" style="margin-top:16px;color:#b2b6ca">Sair da conta</button>
+<p style="text-align:center;font-size:10.5px;color:#595d6c;margin-top:14px">Astros 1.0 · efemérides Swiss Ephemeris</p>
+</div>
+</sc-if>
+
+<sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+<div style="position:sticky;bottom:0;margin-top:auto;padding:8px 10px 30px;background:linear-gradient(to top,#161826 62%,rgba(22,24,38,.92) 84%,rgba(22,24,38,0))">
+<div style="display:flex;justify-content:space-between;gap:2px;padding:6px 6px;border-radius:16px;background:rgba(35,37,50,.92);box-shadow:0 0 0 1px #3f424d">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+<button onClick="{{ t.go }}" style="{{ t.css }}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ t.ink }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ t.icon }}"></path></svg>
+<span style="font-size:9.5px;letter-spacing:.02em;color:{{ t.ink }}">{{ t.label }}</span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:402,&quot;height&quot;:874},&quot;screen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;home&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;mapa&quot;,&quot;horoscopo&quot;,&quot;signo&quot;,&quot;sinastria&quot;,&quot;premium&quot;,&quot;ajustes&quot;,&quot;auth&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Tela&quot;}}">
+const GL={ari:'M3.5 18.5C3.5 8 7.5 4.5 12 9.5C16.5 4.5 20.5 8 20.5 18.5',tou:'M5.5 5.5C8 2.5 16 2.5 18.5 5.5 M6.4 14.9a5.6 5.6 0 1 0 11.2 0a5.6 5.6 0 1 0 -11.2 0',gem:'M4 4.5C7.5 6.5 16.5 6.5 20 4.5 M4 19.5C7.5 17.5 16.5 17.5 20 19.5 M7.5 5.8V18.2 M16.5 5.8V18.2',can:'M3.5 9C6 4.5 14 3.5 20.5 7 M20.5 15C18 19.5 10 20.5 3.5 17 M4 12.2a2.6 2.6 0 1 0 5.2 0a2.6 2.6 0 1 0 -5.2 0 M14.8 11.8a2.6 2.6 0 1 0 5.2 0a2.6 2.6 0 1 0 -5.2 0',leo:'M11.7 12.6a4 4 0 1 0 .7 3.4 M12.4 16C14.5 6 20 4.5 20 9.5C20 13 16.5 13.5 15 11',vir:'M3 6.5V17 M3 8.5C4 5.5 7 5.5 8 8.5V17 M8 8.5C9 5.5 12 5.5 13 8.5V15C13 18.5 15.5 19.5 17.5 17.5 M13 12.5C17.5 12 20 15 17 19',lib:'M2.5 18.5H21.5 M5 13.5H9.5 M14.5 13.5H19 M9.5 13.5C9 7 15 7 14.5 13.5',esc:'M2.5 6.5V17 M2.5 8.5C3.5 5.5 6.5 5.5 7.5 8.5V17 M7.5 8.5C8.5 5.5 11.5 5.5 12.5 8.5V17 M12.5 12.5L19 19 M19 19H14 M19 19V14',sag:'M5 19L18.5 5.5 M12 5.5H18.5V12 M7.5 12.5L13 18',cap:'M3.5 7C5.5 4 7.5 6 8.5 9L11 15.5 M8.5 9C10.5 5 15 5 16 10C16.8 14 13.5 15 12.5 13C15 11.5 19 13 19 16.2C19 19.5 15.5 20 14.2 17.6',aqu:'M3 10.5l3.6-3.4l3.6 3.4l3.6-3.4l3.6 3.4l3.6-3.4 M3 17l3.6-3.4l3.6 3.4l3.6-3.4l3.6 3.4l3.6-3.4',pei:'M7.5 3.5C3.5 8 3.5 16 7.5 20.5 M16.5 3.5C20.5 8 20.5 16 16.5 20.5 M4 12H20'};
+const PL={sol:'M3.5 12a8.5 8.5 0 1 0 17 0a8.5 8.5 0 1 0-17 0 M10.8 12a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0-2.4 0',lua:'M15 3.5A9.5 9.5 0 1 0 15 20.5A11.5 11.5 0 0 1 15 3.5',mer:'M8 12a4 4 0 1 0 8 0a4 4 0 1 0-8 0 M12 16v5 M9.5 19h5 M8.5 3.5C9 7 15 7 15.5 3.5',ven:'M8 9a4 4 0 1 0 8 0a4 4 0 1 0-8 0 M12 13v8 M9 17.5h6',mar:'M4.5 15.5a5.5 5.5 0 1 0 11 0a5.5 5.5 0 1 0-11 0 M14 12L20 6 M15 5.5h5v5',jup:'M4.5 7C6 4 10.5 4.5 10 8.5C9.6 12 5 14.5 5 14.5 M10 8.5V19 M4 19h13',sat:'M4 7h7 M7.5 3.5V13.5 M7.5 13.5C11.5 12 15 13.5 15 17.5C15 20.5 12 21 10.5 19',ura:'M9.6 18.1a2.4 2.4 0 1 0 4.8 0a2.4 2.4 0 1 0-4.8 0 M12 15.7V3.5 M8 7.5h8',nep:'M4.5 7.5C4.5 15 19.5 15 19.5 7.5 M4.5 7.5V10.5 M19.5 7.5V10.5 M12 5V21 M8 18.5h8',plu:'M6 20.5V6.5H10a3.5 3.5 0 0 1 0 7H6 M13.5 6.5V20.5h5.5'};
+const ASP={tri:'M12 4l8 15H4z',qua:'M5 5h14v14H5z',con:'M7 12a5 5 0 1 0 10 0a5 5 0 1 0-10 0',sex:'M12 4v16 M5 8l14 8 M19 8L5 16',opp:'M4 12h16 M4 12a2 2 0 1 0 4 0a2 2 0 1 0-4 0 M16 12a2 2 0 1 0 4 0a2 2 0 1 0-4 0'};
+const SIGNS=[['ari','Áries','Fogo','Marte','21 mar – 19 abr'],['tou','Touro','Terra','Vênus','20 abr – 20 mai'],['gem','Gêmeos','Ar','Mercúrio','21 mai – 20 jun'],['can','Câncer','Água','Lua','21 jun – 22 jul'],['leo','Leão','Fogo','Sol','23 jul – 22 ago'],['vir','Virgem','Terra','Mercúrio','23 ago – 22 set'],['lib','Libra','Ar','Vênus','23 set – 22 out'],['esc','Escorpião','Água','Plutão','23 out – 21 nov'],['sag','Sagitário','Fogo','Júpiter','22 nov – 21 dez'],['cap','Capricórnio','Terra','Saturno','22 dez – 19 jan'],['aqu','Aquário','Ar','Urano','20 jan – 18 fev'],['pei','Peixes','Água','Netuno','19 fev – 20 mar']];
+const MODS={ari:'Cardinal',tou:'Fixo',gem:'Mutável',can:'Cardinal',leo:'Fixo',vir:'Mutável',lib:'Cardinal',esc:'Fixo',sag:'Mutável',cap:'Cardinal',aqu:'Fixo',pei:'Mutável'};
+const PERIODS=[['dia','Dia'],['semana','Semana'],['mes','Mês'],['ano','Ano']];
+const TEXTS={
+  dia:{range:'14 de agosto',ruler:'regido por Vênus',lede:'Um dia de luz oblíqua: o que você mostra importa menos do que o que você sustenta.',drop:'O',b1:'Sol a 22° de Leão toca o seu Meio do Céu e a sua reputação fala antes de você. Não corrija a versão que os outros contam — corrija a sua entrega. Antes das dez, resolva o que envolve dinheiro de outra pessoa; depois disso Mercúrio entra em zona muda e a mesma conversa custa o dobro.',b2:'À noite, Vênus em trígono com Netuno abre uma fenda de ternura. Se alguém aparecer com um pedido pequeno, atenda — é por ali que o mês vira.'},
+  semana:{range:'11 – 17 de agosto',ruler:'semana de Lua minguante',lede:'A semana pede desmontagem: três coisas que você carrega já cumpriram o serviço.',drop:'A',b1:'Lua minguante em Peixes atravessa a sua casa V e desfaz a urgência de agradar. Segunda e terça servem para encerrar; quarta traz uma notícia de trabalho que parece pequena e não é. De quinta em diante, Marte a 29° de Gêmeos acelera as conversas e encurta a paciência de todos — escreva antes de falar.',b2:'O fim de semana traz a única janela limpa: Vênus e Netuno em bom ângulo, sem nenhuma quadratura ativa. Guarde o domingo para o corpo.'},
+  mes:{range:'agosto de 2026',ruler:'mês solar de Leão',lede:'O mês em que a sua imagem pública e a sua vida privada param de disputar o mesmo espaço.',drop:'A',b1:'Com o Sol atravessando a sua casa X até o dia 22, o trabalho ganha rosto: reuniões que se arrastavam ganham decisão, e um nome mais velho volta a te chamar. A partir do dia 23, com o Sol em Virgem, a exigência muda de altura para profundidade — revise contratos, corpos e agendas.',b2:'Mercúrio retrógrado até 28 mantém três assuntos em suspenso. Não force: o que voltar depois do dia 29 volta melhor formado.'},
+  ano:{range:'2026',ruler:'ano de Júpiter em Touro',lede:'Um ano de raiz, não de salto: o que for plantado devagar é o que fica.',drop:'U',b1:'Júpiter percorre a sua casa VII e amplia tudo que envolve parceria — sociedade, contrato, casamento, litígio. Entre março e julho, uma proposta muda o seu padrão de renda; entre setembro e novembro, Saturno cobra a estrutura que sustenta essa mudança.',b2:'Os dois eclipses do ano tocam o seu eixo Leão–Aquário: um começo público em fevereiro, um encerramento íntimo em agosto. O ano não pede coragem — pede constância.'}
+};
+class Component extends DCLogic {
+  state={screen:null,step:1,activeSign:null,signo:'leo',period:'dia',plan:'anual',hora:false,city:'bh',notif:{diario:true,transito:true,retro:false}};
+  cur(){ return this.state.screen ?? this.props.screen ?? 'home'; }
+  go(s){ return ()=>this.setState({screen:s}); }
+  renderVals(){
+    const sc=this.cur(), S=this.state;
+    const sign=(k)=>SIGNS.find(s=>s[0]===k);
+    const sg=sign(S.signo);
+    let seed=13; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+    const stars=Array.from({length:14},()=>{
+      const t=(2+rnd()*4).toFixed(1);
+      return {css:`position:absolute;left:${(rnd()*100).toFixed(1)}%;top:${(rnd()*95).toFixed(1)}%;width:${(1+rnd()*1.6).toFixed(1)}px;height:${(1+rnd()*1.6).toFixed(1)}px;border-radius:999px;background:#e9e9ed;animation:astTwinkle ${t}s ease-in-out ${(rnd()*4).toFixed(1)}s infinite`};
+    });
+    const tabDef=[['home','Hoje','M3.5 12a8.5 8.5 0 1 0 17 0a8.5 8.5 0 1 0-17 0 M12 1.5v2 M12 20.5v2 M1.5 12h2 M20.5 12h2'],['mapa','Mapa','M2 12a10 10 0 1 0 20 0a10 10 0 1 0-20 0 M6 12a6 6 0 1 0 12 0a6 6 0 1 0-12 0 M12 2v4 M12 18v4 M2 12h4 M18 12h4'],['horoscopo','Horóscopo','M5 3.5h11a2 2 0 0 1 2 2v15H7a2 2 0 0 1-2-2z M8.5 8h7 M8.5 12h7 M8.5 16h4'],['sinastria','Sinastria','M4 12a5 5 0 1 0 10 0a5 5 0 1 0-10 0 M10 12a5 5 0 1 0 10 0a5 5 0 1 0-10 0'],['ajustes','Perfil','M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6 M8 7.5a4 4 0 1 0 8 0a4 4 0 1 0-8 0']];
+    const tabs=tabDef.map(([k,label,icon])=>{
+      const on=sc===k||(k==='mapa'&&sc==='signo')||(k==='horoscopo'&&sc==='premium');
+      return {label,icon,ink:on?'#b5abfc':'#75798c',go:this.go(k),
+        css:`flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px 6px;border:0;border-radius:11px;cursor:pointer;font:inherit;background:${on?'rgba(66,58,106,.55)':'transparent'}`};
+    });
+    const bodiesData=[['sol','Sol','22°14′','leo','X'],['lua','Lua','8°02′','pei','V'],['mer','Mercúrio','5°41′','vir','XI'],['ven','Vênus','17°53′','can','IX'],['mar','Marte','29°08′','gem','VIII'],['jup','Júpiter','11°36′','tou','VII'],['sat','Saturno','3°19′','ari','VI'],['ura','Urano','26°45′','tou','VII'],['nep','Netuno','0°12′','ari','V'],['plu','Plutão','1°33′','aqu','IV']];
+    const dots=(n)=>Array.from({length:5},(_,i)=>({css:`flex:1;height:3px;border-radius:999px;background:${i<n?'#9184d9':'#2b2741'};display:block`}));
+    const T=TEXTS[S.period];
+    const plateTicks=Array.from({length:48},(_,i)=>{const a=i*7.5*Math.PI/180,l=i%4===0?6:3;
+      return {x1:(60+Math.cos(a)*49).toFixed(1),y1:(60+Math.sin(a)*49).toFixed(1),x2:(60+Math.cos(a)*(49+l)).toFixed(1),y2:(60+Math.sin(a)*(49+l)).toFixed(1)};});
+    const plateStars=Array.from({length:11},()=>({x:(20+rnd()*80).toFixed(1),y:(14+rnd()*92).toFixed(1),r:(0.5+rnd()*0.9).toFixed(2),o:(0.3+rnd()*0.5).toFixed(2)}));
+    const crownRays=Array.from({length:26},(_,i)=>{const a=(i/26)*Math.PI*2,long=i%2===0,w=long?0.06:0.04,rIn=20,rOut=long?44:34;
+      const p=(ang,r)=>`${(50+Math.cos(ang)*r).toFixed(2)} ${(50+Math.sin(ang)*r).toFixed(2)}`;
+      return {d:`M${p(a-w,rIn)} L${p(a,rOut)} L${p(a+w,rIn)} Z`,o:long?0.9:0.45};});
+    const planDef=[['mensal','Mensal','renove todo mês','R$ 19,90','por mês'],['anual','Anual','dois meses por nossa conta','R$ 129','R$ 10,75/mês'],['vitalicio','Vitalício','uma vez, para sempre','R$ 399','pagamento único']];
+    const cityDef=[['bh','Belo Horizonte, MG · Brasil','19°55′S 43°56′O'],['bhc','Belo Horizonte do Sul, MG','21°14′S 45°02′O'],['bel','Belém, PA · Brasil','1°27′S 48°30′O']];
+    const togDef=[['diario','Horóscopo diário','todo dia às 6h'],['transito','Trânsitos pessoais','quando um planeta toca sua carta'],['retro','Retrógrados','no início e no fim de cada ciclo']];
+    return {
+      stars, tabs, showTabs: sc!=='auth', isAuth:sc==='auth', isHome:sc==='home', isMapa:sc==='mapa',
+      isHoroscopo:sc==='horoscopo', isSigno:sc==='signo', isSinastria:sc==='sinastria',
+      isPremium:sc==='premium', isAjustes:sc==='ajustes',
+      goHome:this.go('home'), goHoroscopo:this.go('horoscopo'), goMapa:this.go('mapa'), goSigno:this.go('signo'), goPremium:this.go('premium'),
+      step1:S.step===1, step2:S.step===2, step3:S.step===3, authBack:S.step>1,
+      authKicker:['','passo um · quem','passo dois · quando','passo três · onde'][S.step],
+      authTitle:['','Crie sua carta','O instante exato','O lugar exato'][S.step],
+      authSub:['','Um nome, um endereço e uma senha. O resto é o céu que preenche.','Data e hora do primeiro respiro. Quatro minutos mudam o seu Ascendente.','A latitude decide as casas. Escolha a cidade onde você nasceu.'][S.step],
+      authCta:S.step<3?'Continuar':'Revelar meu mapa',
+      nextStep:()=>S.step<3?this.setState({step:S.step+1}):this.setState({screen:'home'}),
+      prevStep:()=>this.setState({step:Math.max(1,S.step-1)}),
+      stepDots:[1,2,3].map(i=>({css:`display:block;width:${i===S.step?'18px':'6px'};height:6px;border-radius:999px;background:${i<=S.step?'#9184d9':'#3f424d'};transition:width .3s ease`})),
+      toggleHora:()=>this.setState({hora:!S.hora}),
+      horaBoxCss:`display:block;width:17px;height:17px;flex:none;border-radius:5px;box-shadow:0 0 0 1.5px ${S.hora?'#9184d9':'#595d6c'};background:${S.hora?'#9184d9':'transparent'}`,
+      cities:cityDef.map(([k,name,coord])=>({name,coord,pick:()=>this.setState({city:k}),
+        css:`display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:11px 12px;border:0;border-radius:10px;cursor:pointer;font:inherit;color:#e9e9ed;background:#232532;box-shadow:0 0 0 1px ${S.city===k?'#9184d9':'#3f424d'}`,
+        dotCss:`display:block;width:14px;height:14px;border-radius:999px;flex:none;box-shadow:0 0 0 1.5px ${S.city===k?'#9184d9':'#595d6c'};background:${S.city===k?'#9184d9':'transparent'}`})),
+      transits:[
+        {a:PL.ven,b:PL.nep,asp:ASP.tri,ink:'#9184d9',title:'Vênus trígono Netuno',note:'ternura sem esforço · orbe 1°14′',time:'19h42'},
+        {a:PL.lua,b:PL.mar,asp:ASP.qua,ink:'#9397ab',title:'Lua quadratura Marte',note:'a pressa cobra imposto',time:'21h05'},
+        {a:PL.mer,b:PL.jup,asp:ASP.sex,ink:'#9184d9',title:'Mercúrio sextil Júpiter',note:'boa hora de pedir',time:'06h18'},
+        {a:PL.sol,b:PL.plu,asp:ASP.opp,ink:'#9397ab',title:'Sol oposição Plutão',note:'algo antigo pede fim',time:'23h51'}],
+      retro:[{glyph:PL.mer,name:'Mercúrio em Virgem',until:'até 28 ago',barCss:'display:block;height:100%;width:62%;background:linear-gradient(90deg,#5d5294,#b5abfc);border-radius:999px'},
+        {glyph:PL.sat,name:'Saturno em Áries',until:'até 4 nov',barCss:'display:block;height:100%;width:23%;background:linear-gradient(90deg,#5d5294,#9184d9);border-radius:999px'}],
+      activeSign:S.activeSign, hasActive:!!S.activeSign,
+      activeGlyph:S.activeSign?GL[S.activeSign]:'', activeName:S.activeSign?sign(S.activeSign)[1]:'',
+      activeMeta:S.activeSign?`${sign(S.activeSign)[2]} · ${MODS[S.activeSign]} · regente ${sign(S.activeSign)[3]}`:'',
+      selectSign:(k)=>this.setState({activeSign:k===S.activeSign?null:k,signo:k}),
+      bodies:bodiesData.map(([k,name,deg,sk,house])=>({name,deg,house,glyph:PL[k],signGlyph:GL[sk],ink:k==='sol'||k==='lua'?'#f5f4ff':'#d2cefd'})),
+      periods:PERIODS.map(([k,label])=>({label,on:S.period===k,pick:()=>this.setState({period:k}),
+        css:`flex:1;justify-content:center;${S.period===k?'color:#b5abfc;box-shadow:inset 0 0 0 1px #9184d9':''}`})),
+      periodRange:T.range, periodRuler:T.ruler, periodLede:T.lede, periodDrop:T.drop,
+      periodBody1:T.b1, periodBody2:T.b2,
+      areas:[{name:'Amor',word:'aberto',icon:'M12 20s-7-4.4-7-9.2A4 4 0 0 1 12 8a4 4 0 0 1 7 2.8C19 15.6 12 20 12 20z',dots:dots(4)},
+        {name:'Trabalho',word:'exigente',icon:'M4 8h16v11H4z M9 8V6h6v2',dots:dots(3)},
+        {name:'Corpo',word:'em alta',icon:'M12 3v18 M7 8l5-5 5 5 M7 16l5 5 5-5',dots:dots(5)},
+        {name:'Dinheiro',word:'em espera',icon:'M4 12a8 8 0 1 0 16 0a8 8 0 1 0-16 0 M12 7v10 M9.5 9.5h5 M9.5 14.5h5',dots:dots(2)}],
+      plateTicks, plateStars, signoGlyph:GL[S.signo], signoName:sg[1], signoDates:sg[4],
+      signoEl:sg[2], signoMod:MODS[S.signo], signoRuler:sg[3],
+      signoBody:'Leão não pede palco: pede testemunha. É o signo do coração como órgão de decisão — governa o que se faz por amor à própria criação, e adoece quando o aplauso substitui o motivo. Fixo, de fogo: a chama que não se move, aquela que aquece a casa inteira desde o mesmo canto.',
+      signoRows:[{k:'elemento',v:`${sg[2]} · Yang`},{k:'modalidade',v:MODS[S.signo]},{k:'regente',v:sg[3]},{k:'casa natural',v:'V · criação e prazer'},{k:'corpo',v:'coração, coluna, circulação'},{k:'mineral',v:'Citrino, âmbar'}],
+      signoVirtues:[{t:'generosidade'},{t:'lealdade'},{t:'coragem cênica'},{t:'calor'},{t:'liderança'}],
+      signoShadow:[{t:'vaidade'},{t:'teimosia'},{t:'carência de plateia'},{t:'drama'}],
+      signStrip:SIGNS.map(([k])=>({glyph:GL[k],pick:()=>this.setState({signo:k,activeSign:k}),ink:S.signo===k?'#f5f4ff':'#75798c',
+        css:`flex:none;width:38px;height:38px;display:grid;place-items:center;border:0;border-radius:11px;cursor:pointer;background:${S.signo===k?'rgba(66,58,106,.7)':'#232532'};box-shadow:0 0 0 1px ${S.signo===k?'#9184d9':'#3f424d'}`})),
+      synastry:[['Emocional',82],['Mental',71],['Física',88],['Espiritual',64]].map(([name,v])=>({name,v:`${v}%`,
+        barCss:`display:block;height:100%;width:${v}%;background:linear-gradient(90deg,#5d5294,#b5abfc);border-radius:999px`})),
+      synAspects:[{a:PL.sol,b:PL.lua,asp:ASP.tri,ink:'#9184d9',title:'Sol dela · Lua dele',note:'ele entende antes de você explicar',orb:'2°10′'},
+        {a:PL.ven,b:PL.mar,asp:ASP.con,ink:'#9184d9',title:'Vênus · Marte',note:'atração sem tradução',orb:'0°48′'},
+        {a:PL.mer,b:PL.sat,asp:ASP.qua,ink:'#9397ab',title:'Mercúrio · Saturno',note:'ele encurta o que você alonga',orb:'3°02′'},
+        {a:PL.lua,b:PL.ura,asp:ASP.opp,ink:'#9397ab',title:'Lua · Urano',note:'rotina é o campo de batalha',orb:'1°35′'}],
+      crownRays,
+      plans:planDef.map(([k,name,note,price,per])=>({name,note,price,per,pick:()=>this.setState({plan:k}),
+        css:`display:flex;align-items:center;gap:11px;width:100%;padding:13px 14px;border:0;border-radius:12px;cursor:pointer;font:inherit;color:#e9e9ed;text-align:left;background:${S.plan===k?'rgba(66,58,106,.5)':'#232532'};box-shadow:0 0 0 ${S.plan===k?'1.5px #9184d9':'1px #3f424d'}`,
+        dotCss:`display:block;width:16px;height:16px;border-radius:999px;flex:none;box-shadow:0 0 0 1.5px ${S.plan===k?'#9184d9':'#595d6c'};background:${S.plan===k?'#9184d9':'transparent'}`})),
+      planPrice:planDef.find(p=>p[0]===S.plan)[3],
+      perks:[{t:'Leituras diárias, semanais, mensais e anuais escritas para a sua carta — não para o seu signo solar'},
+        {t:'Trânsitos em tempo real com alerta na hora exata do aspecto'},
+        {t:'Revisão de casas, decanatos e progressões secundárias'},
+        {t:'Sinastria ilimitada, com pessoas salvas e comparação lado a lado'},
+        {t:'Exportação do mapa em PDF de alta resolução'}],
+      birthRows:[{k:'Data',v:'12 ago 1994',icon:'M4 6.5h16v14H4z M8 3v4 M16 3v4 M4 11h16'},
+        {k:'Hora',v:'22h40 · GMT-3',icon:'M4 12a8 8 0 1 0 16 0a8 8 0 1 0-16 0 M12 7.5V12l3.5 2'},
+        {k:'Local',v:'Belo Horizonte, MG',icon:'M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z M9.5 10a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0'},
+        {k:'Sistema de casas',v:'Placidus',icon:'M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0 M12 3v18 M3 12h18'}],
+      toggles:togDef.map(([k,name,note])=>{const on=S.notif[k];
+        return {name,note,toggle:()=>this.setState({notif:{...S.notif,[k]:!on}}),
+          trackCss:`flex:none;width:42px;height:24px;border:0;border-radius:999px;cursor:pointer;padding:3px;display:flex;justify-content:${on?'flex-end':'flex-start'};background:${on?'#5d5294':'#3f424d'};box-shadow:0 0 0 1px ${on?'#9184d9':'#595d6c'};transition:background .2s ease`,
+          knobCss:`display:block;width:18px;height:18px;border-radius:999px;background:${on?'#f5f4ff':'#9397ab'}`};}),
+      acctRows:[{k:'E-mail',v:'marina@exemplo.com'},{k:'Senha',v:'alterada em jun'},{k:'Plano',v:'Pleno anual'},{k:'Idioma',v:'Português (BR)'}]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+name: Validar planetário
+
+on:
+  pull_request:
+    paths:
+      - 'apps/web/**'
+      - 'packages/contracts/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/validar-planetario.yml'
+  workflow_dispatch:
+
+jobs:
+  validar-web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Compilar contratos
+        run: npm run build --workspace @astros/contracts
+
+      - name: Verificar TypeScript da web
+        run: npm run typecheck --workspace @astros/web
+
+      - name: Gerar build da web
+        run: npm run build --workspace @astros/web

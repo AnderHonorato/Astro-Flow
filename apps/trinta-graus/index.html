@@ -1753,7 +1753,7 @@ strong{color:var(--titulo);font-weight:700}
      vem por último, para não roubar o primeiro Tab da marca.
      ⚠ AO PUBLICAR: escolha uma direção, fixe data-tema no <html> e apague
      este bloco + o item 1 do script. ===================================== -->
-<div class="seletor" role="group" aria-label="Trocar a direção de arte da página">
+<div class="seletor" role="group" aria-label="Trocar a direção de arte da página. Use as setas do teclado">
   <button type="button" class="seletor-btn" data-set-tema="grau" aria-pressed="true">C · Grau</button>
   <button type="button" class="seletor-btn" data-set-tema="efemeride" aria-pressed="false">A · Efeméride</button>
   <button type="button" class="seletor-btn" data-set-tema="eclipse" aria-pressed="false">B · Eclipse</button>
@@ -1771,6 +1771,17 @@ strong{color:var(--titulo);font-weight:700}
 
   /* ---- 1. troca de direção de arte ------------------------------------- */
   var botoes = document.querySelectorAll('[data-set-tema]');
+  /* A seleção é uma experiência editorial; as setas percorrem as três capas. */
+  Array.prototype.forEach.call(botoes, function (botao, indice) {
+    botao.addEventListener('keydown', function (evento) {
+      if (!['ArrowLeft','ArrowRight','Home','End'].includes(evento.key)) return;
+      evento.preventDefault();
+      var tamanho = botoes.length;
+      var destino = evento.key === 'Home' ? 0 : evento.key === 'End' ? tamanho-1 : evento.key === 'ArrowRight' ? (indice+1)%tamanho : (indice+tamanho-1)%tamanho;
+      botoes[destino].click();
+      botoes[destino].focus();
+    });
+  });
   var temaCor = { grau: '#E9E7E1', efemeride: '#0E1420', eclipse: '#1A1512' };
   var metaCor = document.querySelector('meta[name="theme-color"]');
 

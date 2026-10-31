@@ -25,8 +25,8 @@ export default function HomePage() {
             <Link href="/observatorio" className="btn btn-secondary min-h-11 px-5"><span aria-hidden>✦</span> Observatório Celeste</Link>
           </div>
           <div className="mt-12 grid max-w-[620px] grid-cols-2 gap-px overflow-hidden rounded-lg bg-neutral-800/60 sm:grid-cols-4">
-            {[['Sol agora','Leão 22°14′'],['Lua','Peixes · minguante'],['Trânsitos','Em movimento'],['Precisão','Ao minuto']].map(([label,value]) => (
-              <div key={label} className="bg-surface/70 px-4 py-4">
+            {[['Carta natal','Sua história'],['Trânsitos','Céu em movimento'],['Observatório','Explore posições'],['Leituras','Seu contexto']].map(([label,value]) => (
+              <div key={label} className="bg-surface/70 px-4 py-4 transition-colors duration-300 hover:bg-surface">
                 <div className="text-[10px] uppercase tracking-[.12em] text-neutral-600">{label}</div>
                 <div className="mt-1 text-[12px] text-neutral-300">{value}</div>
               </div>
